@@ -87,6 +87,8 @@ Windows 使用原生 endpoint 渲染，不启动 `herdr terminal attach`。快�
 | 跳到等待中的 agent | `Cmd+J` |
 | 设置 | `Cmd+,` |
 | 放大 / 缩小 / 重置字号 | `Cmd+=` / `Cmd+-` / `Cmd+0` |
+| 行首 / 行尾 / 删到行首 | `Cmd+←` / `Cmd+→` / `Cmd+⌫` |
+| 按词左移 / 右移 | `Option+←` / `Option+→` |
 
 终端已有 owner 时，应用保留诊断信息并提供 Retry，不自动 takeover。关闭窗口只释放本应用的连接，不关闭 Herdr 会话。
 

@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/herdr-ui/internal/input"
 	"github.com/egoist/mygo"
 	"github.com/egoist/mygo/plugins/terminal"
 	"github.com/egoist/mygo/transfer"
@@ -658,6 +659,11 @@ func (h *Host) options(e *entry) (terminal.Options, error) {
 			}
 			if !result.Consumed && mods == ui.Ctrl && k == ui.KeyB {
 				result = KeyResult{Consumed: true, Send: []byte{2, 2}}
+			}
+			// Herdr's own bindings come first; the attach stream reserves
+			// only Ctrl+B, which these bytes never contain.
+			if send, ok := input.LineEditKey(runtime.GOOS, mods, k); ok && !result.Consumed {
+				result = KeyResult{Consumed: true, Send: send}
 			}
 			if result.Consumed && len(result.Send) > 0 {
 				h.mu.Lock()

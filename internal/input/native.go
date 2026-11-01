@@ -38,3 +38,30 @@ func NativeKey(mods ui.Modifiers, key ui.Key) (string, bool) {
 	n, err := Normalize(strings.Join(append(parts, name), "+"))
 	return n, err == nil
 }
+
+// LineEditKey returns the bytes a macOS line-editing shortcut sends, as
+// Ghostty's default keybinds do: Command+Left and Right go to the start and
+// end of the line (Ctrl+A, Ctrl+E), Command+Backspace deletes to its start
+// (Ctrl+U), and Option+Left and Right move a word (Esc B, Esc F) whether
+// or not Option is the Meta key. Other platforms leave these keys alone.
+func LineEditKey(goos string, mods ui.Modifiers, key ui.Key) ([]byte, bool) {
+	if goos != "darwin" {
+		return nil, false
+	}
+	var b string
+	switch {
+	case mods == ui.Super && key == ui.KeyLeft:
+		b = "\x01"
+	case mods == ui.Super && key == ui.KeyRight:
+		b = "\x05"
+	case mods == ui.Super && key == ui.KeyBackspace:
+		b = "\x15"
+	case mods == ui.Alt && key == ui.KeyLeft:
+		b = "\x1bb"
+	case mods == ui.Alt && key == ui.KeyRight:
+		b = "\x1bf"
+	default:
+		return nil, false
+	}
+	return []byte(b), true
+}

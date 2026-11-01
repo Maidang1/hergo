@@ -16,6 +16,8 @@ Default prefix: Ctrl+B. Release the prefix before pressing the action key. Press
 | Client | Help, settings, config reload, sidebar toggle, detach, visible notification target, image paste |
 | Custom commands | Shell, pane, popup, plugin actions; lookup uses the server's opaque command catalog |
 
+On macOS the terminals also send Ghostty's line-editing keys: Command+Left and Right go to the start and end of the line (Ctrl+A, Ctrl+E), Command+Backspace deletes to its start (Ctrl+U), and Option+Left and Right move a word (Esc B, Esc F), whether or not Option is the Meta key. A Herdr binding on the same key takes it first. Command+Up and Down (jump to prompt) are not available.
+
 Ordinary navigation remains local to the window. Navigating to a hidden pane in a zoomed tab uses explicit server focus and waits for the matching layout. Mutations capture workspace/tab/pane identity; later selection changes cannot retarget an already queued operation. Network-uncertain mutations are not retried.
 
 Settings and scrollback open an embedded editor using `$EDITOR` (default `vi`). Saving settings does not automatically reload them: use the reload-config shortcut. Popup and plugin commands use an embedded Herdr client to display server-owned interactive surfaces. This command view owns its keyboard input and can be detached with its close button.
