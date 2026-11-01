@@ -5,11 +5,13 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"runtime"
 	"slices"
 	"strings"
 	"sync"
 
 	"github.com/Maidang1/herdr-ui/internal/design"
+	"github.com/Maidang1/herdr-ui/internal/input"
 	"github.com/egoist/mygo/plugins/terminal"
 	native "github.com/egoist/mygo/ui"
 )
@@ -38,6 +40,7 @@ type commandSurfacePlugin struct{ terminal *terminal.Terminal }
 func (p *commandSurfacePlugin) View(c *native.Context) native.Element {
 	return terminal.View(c, p.terminal)
 }
+func (p *commandSurfacePlugin) Send(b []byte) { p.terminal.Send(b) }
 func (p *commandSurfacePlugin) Close() error {
 	err := p.terminal.Close()
 	<-p.terminal.Done()
@@ -104,6 +107,17 @@ func (w *Window) openCommandSurfaceMode(title string, command, env []string, cwd
 		Command: slices.Clone(command), Env: childEnv, Dir: cwd,
 		Font: terminal.Font{Size: 13}, Padding: terminal.Padding{X: 12, Y: 10},
 		ClipboardRead: terminal.ClipboardDeny, RightClick: terminal.RightClickCopyOrPaste,
+		OnKey: func(mods native.Modifiers, key native.Key) bool {
+			send, ok := input.LineEditKey(runtime.GOOS, mods, key)
+			if ok {
+				if instance, _ := s.current(); instance != nil {
+					if sender, ok := instance.(interface{ Send([]byte) }); ok {
+						sender.Send(send)
+					}
+				}
+			}
+			return ok
+		},
 		OnExit: func(code int) {
 			if retain {
 				post(func() {

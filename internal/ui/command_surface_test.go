@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"path/filepath"
+	"runtime"
 	"sync"
 	"testing"
 	"time"
@@ -82,8 +83,12 @@ func TestCommandSurfaceClosesLateCompletion(t *testing.T) {
 	o := receiveSurface(t, h.options)
 	cmd[0] = "/different"
 	env[0] = "HERDR_SOCKET_PATH=/wrong"
-	if o.Command[0] != binary || o.Dir != dir || o.Env[len(o.Env)-1] != socketEnv || o.OnKey != nil {
+	if o.Command[0] != binary || o.Dir != dir || o.Env[len(o.Env)-1] != socketEnv || o.OnKey == nil {
 		t.Fatal(o)
+	}
+	// The surface owns its keyboard: no prefix, only macOS line editing.
+	if o.OnKey(native.Ctrl, native.KeyB) || o.OnKey(native.Super, native.KeyLeft) != (runtime.GOOS == "darwin") {
+		t.Fatal("command surface key handling")
 	}
 	if h.w.terminal.focused != "" {
 		t.Fatal("main input not blurred")

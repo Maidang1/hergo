@@ -100,3 +100,32 @@ func TestConfiguredCtrlBActionPrecedesTransportEscape(t *testing.T) {
 		t.Fatal(r)
 	}
 }
+
+func TestLineEditKey(t *testing.T) {
+	for _, tt := range []struct {
+		mods ui.Modifiers
+		key  ui.Key
+		want string
+	}{
+		{ui.Super, ui.KeyLeft, "\x01"}, {ui.Super, ui.KeyRight, "\x05"}, {ui.Super, ui.KeyBackspace, "\x15"},
+		{ui.Alt, ui.KeyLeft, "\x1bb"}, {ui.Alt, ui.KeyRight, "\x1bf"},
+	} {
+		got, ok := LineEditKey("darwin", tt.mods, tt.key)
+		if !ok || string(got) != tt.want {
+			t.Fatalf("%v/%v = %q,%v want %q", tt.mods, tt.key, got, ok, tt.want)
+		}
+		if _, ok := LineEditKey("linux", tt.mods, tt.key); ok {
+			t.Fatalf("%v/%v mapped off macOS", tt.mods, tt.key)
+		}
+	}
+	for _, tt := range []struct {
+		mods ui.Modifiers
+		key  ui.Key
+	}{
+		{ui.Super | ui.Shift, ui.KeyLeft}, {ui.Alt | ui.Shift, ui.KeyRight}, {ui.Ctrl, ui.KeyLeft}, {ui.Super, ui.KeyUp}, {ui.Alt, ui.KeyBackspace},
+	} {
+		if got, ok := LineEditKey("darwin", tt.mods, tt.key); ok {
+			t.Fatalf("%v/%v = %q, want unmapped", tt.mods, tt.key, got)
+		}
+	}
+}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/Maidang1/herdr-ui/internal/herdr"
 	"github.com/egoist/mygo/transfer"
+	"runtime"
 	"sync"
 	"testing"
 	"time"
@@ -527,6 +528,31 @@ func TestInputHookBeforeLiteralAndStale(t *testing.T) {
 	if calls != 1 {
 		t.Fatal("stale hook called", calls)
 	}
+}
+
+// macOS line-editing keys reach the attach stream as Ghostty sends them,
+// unless a Herdr binding takes the key first.
+func TestLineEditKeysAfterHook(t *testing.T) {
+	x := setup()
+	x.h.cfg.OnKey = func(_ Binding, mods ui.Modifiers, k ui.Key, _ InputState) KeyResult {
+		if mods == ui.Alt && k == ui.KeyLeft {
+			return KeyResult{Consumed: true, Send: []byte("bound")}
+		}
+		return KeyResult{}
+	}
+	reconcile(t, x)
+	o := receive(t, x.options)
+	x.release <- struct{}{}
+	receive(t, x.posts)()
+	took := o.OnKey(ui.Super, ui.KeyLeft)
+	if want := runtime.GOOS == "darwin"; took != want || want && string(x.f.sent) != "\x01" || !want && len(x.f.sent) != 0 {
+		t.Fatal(took, x.f.sent)
+	}
+	x.f.sent = nil
+	if !o.OnKey(ui.Alt, ui.KeyLeft) || string(x.f.sent) != "bound" {
+		t.Fatal(x.f.sent)
+	}
+	finish(t, x)
 }
 
 type composingTerminal struct {

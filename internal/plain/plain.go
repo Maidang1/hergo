@@ -12,6 +12,7 @@ import (
 
 	"github.com/Maidang1/herdr-ui/internal/design"
 	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/herdr-ui/internal/input"
 	"github.com/egoist/mygo/plugins/terminal"
 	native "github.com/egoist/mygo/ui"
 )
@@ -149,8 +150,16 @@ func (w *Window) start(t *tab, dir string) {
 			command, ok := Shortcut(runtime.GOOS, mods, key)
 			if ok {
 				w.opts.Post(func() { w.Command(command) })
+				return true
 			}
-			return ok
+			// Keys arrive on the UI thread, which installs t.term.
+			if send, ok := input.LineEditKey(runtime.GOOS, mods, key); ok {
+				if t.term != nil {
+					t.term.Send(send)
+				}
+				return true
+			}
+			return false
 		},
 	})
 	w.opts.Post(func() {
