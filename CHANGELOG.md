@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.0.17
 
 - On macOS, `Cmd+Left`/`Cmd+Right` move to the start/end of the line, `Cmd+Backspace` deletes to its start, and `Option+Left`/`Option+Right` move by word, as in Ghostty. Applies to Herdr panes, plain terminals and command views; a Herdr binding on the same key wins.
 
