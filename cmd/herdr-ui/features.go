@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/Maidang1/herdr-ui/internal/app"
+	"github.com/Maidang1/herdr-ui/internal/gitdiff"
 	"github.com/Maidang1/herdr-ui/internal/herdr"
 	"github.com/Maidang1/herdr-ui/internal/prefs"
 	"github.com/Maidang1/herdr-ui/internal/session"
@@ -25,6 +26,24 @@ func featureIdentity(s *session.Session, op session.Operation) bool {
 	return ok && pane.TerminalID == op.TerminalID && pane.TabID == op.TabID && pane.WorkspaceID == op.WorkspaceID
 }
 func installFeatureHooks(h *view.ActionHooks, ctx context.Context, s *session.Session, target herdr.Target, screen *view.Window, post func(func()), binary string) {
+	h.Changes = func(dir string, done func(gitdiff.Changes, error)) func() {
+		call, cancel := context.WithCancel(ctx)
+		go func() {
+			defer cancel()
+			changes, err := gitdiff.List(call, dir)
+			post(func() { done(changes, err) })
+		}()
+		return cancel
+	}
+	h.DiffFile = func(req gitdiff.Request, done func(gitdiff.Text, error)) func() {
+		call, cancel := context.WithCancel(ctx)
+		go func() {
+			defer cancel()
+			text, err := gitdiff.Read(call, req)
+			post(func() { done(text, err) })
+		}()
+		return cancel
+	}
 	stale := func() error { return fmt.Errorf("the terminal or connection changed; select it again") }
 	h.PaneDetails = func(op session.Operation, done func(herdr.PaneDetails, error)) {
 		go func() {

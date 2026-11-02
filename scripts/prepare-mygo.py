@@ -11,6 +11,7 @@ OptionAsAlt element property keeps Option keys from macOS input methods, which
 otherwise typed the Option character after the Meta key.
 SetFollowThemeColors keeps the default foreground and background on the
 window's theme when an attach stream replays another terminal's OSC colors.
+Command-scroll on macOS scrolls normally instead of changing the font size.
 """
 import hashlib
 import json
@@ -141,7 +142,8 @@ def prepare_locked():
     build = ROOT / ".build"
     dest = build / "mygo"
     theme_patch = ROOT / "scripts/mygo-theme-colors.go.txt"
-    stamp = {"version": version, "patch_sha256": hashlib.sha256(Path(__file__).read_bytes() + theme_patch.read_bytes()).hexdigest()}
+    scroll_test = ROOT / "scripts/mygo-scroll-zoom_test.go.txt"
+    stamp = {"version": version, "patch_sha256": hashlib.sha256(Path(__file__).read_bytes() + theme_patch.read_bytes() + scroll_test.read_bytes()).hexdigest()}
     stamp_path = dest / ".herdr-ui-patch.json"
     work = build / "go.work"
     go_version = re.search(r"^go\s+(\S+)", (ROOT / "go.mod").read_text(encoding="utf-8"), re.M).group(1)
@@ -179,6 +181,7 @@ def prepare_locked():
         source = replace_once(source, "// pointerEvent reports the pointer to the program that takes the mouse, or\n", POINTER_INPUT + "\n// pointerEvent reports the pointer to the program that takes the mouse, or\n", view)
         source = replace_once(source, "\te.TextCaret(v.caret())\n", "\te.TextCaret(v.caret())\n\te.OptionAsAlt(t.opts.OptionAsAlt)\n", view)
         source = replace_once(source, "\ttheme   *Theme\n", "\tcanvasBackground vt.Color\n\ttheme   *Theme\n", view)
+        source = replace_once(source, "\tif ev.Mods&ui.Cmd != 0 {", "\tif ev.Mods&ui.Cmd != 0 && runtime.GOOS != \"darwin\" {", view)
         view.write_text(source, encoding="utf-8")
         paint = staged / "plugins/terminal/paint.go"
         source = paint.read_text(encoding="utf-8")
@@ -189,7 +192,9 @@ def prepare_locked():
         paint.write_text(source, encoding="utf-8")
         theme_source = staged / "plugins/terminal/herdr_theme_colors.go"
         theme_source.write_bytes(theme_patch.read_bytes())
-        patched = [terminal, view, paint, theme_source] + patch_option_as_alt(staged)
+        scroll_test_source = staged / "plugins/terminal/herdr_scroll_zoom_test.go"
+        scroll_test_source.write_bytes(scroll_test.read_bytes())
+        patched = [terminal, view, paint, theme_source, scroll_test_source] + patch_option_as_alt(staged)
         subprocess.run(["gofmt", "-w", *map(str, patched)], check=True, env=env)
         (staged / ".herdr-ui-patch.json").write_text(json.dumps(stamp, sort_keys=True) + "\n", encoding="utf-8")
         if dest.exists():

@@ -82,6 +82,7 @@ func (w *Window) openCommandSurfaceMode(title string, command, env []string, cwd
 		title = "Command"
 	}
 	w.CloseCommandSurface()
+	w.closeChanges()
 	w.details.open = false
 	w.details.generation++
 	w.details.busy = false

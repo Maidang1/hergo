@@ -43,6 +43,7 @@ var MenuBar = []MenuSection{
 		{"focus_pane_left", "focus_pane_right", "focus_pane_up", "focus_pane_down", "cycle_pane_next", "cycle_pane_previous", "last_pane"},
 	}},
 	{"View", [][]string{
+		{"changes"},
 		{"toggle_sidebar", "zen", "agent_view_next"},
 		{"zoom_in", "zoom_out", "zoom_reset"},
 	}},
