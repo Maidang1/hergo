@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.19
+
+- Fix a Windows named-pipe listener shutdown race that could hang session cleanup and block release tests. Upgrade go-winio to v0.6.4 and run its listener-close regression tests in Windows CI.
+- Include the Changes view and macOS Command-scroll fix from 0.0.18, whose release was blocked by the Windows test failure.
+
 ## 0.0.18
 
 - Add a read-only Changes view for workspace changes relative to HEAD, including staged, unstaged, and untracked files. Open it from the toolbar, View menu, command palette, or workspace context menu.
