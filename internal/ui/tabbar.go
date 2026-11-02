@@ -59,6 +59,15 @@ func (w *Window) toolbar(c *native.Context, v app.View, p design.Palette) {
 			}
 		}
 		w.prefixChip(c, p)
+		if len(v.Tabs) > 0 {
+			label := "Changes"
+			if w.changes.open {
+				label = "Terminal"
+			}
+			if w.changesButton(c, "show-changes", label, "Toggle changes", false, p).Disabled(!w.Can("changes")).Clicked() {
+				w.Dispatch("changes")
+			}
+		}
 		w.singlePaneControls(c, v, p)
 		if len(v.Tabs) > 0 {
 			w.tabActionsMenu(c, p)
@@ -77,7 +86,7 @@ func (w *Window) singlePane(v app.View) bool {
 // controls at the toolbar's trailing edge, where a split tab's cards carry
 // their own.
 func (w *Window) singlePaneControls(c *native.Context, v app.View, p design.Palette) {
-	if !w.singlePane(v) {
+	if !w.singlePane(v) || w.changes.open {
 		return
 	}
 	for _, pane := range v.Panes {

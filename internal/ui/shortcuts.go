@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Maidang1/herdr-ui/internal/app"
+	"github.com/Maidang1/herdr-ui/internal/gitdiff"
 	"github.com/Maidang1/herdr-ui/internal/herdr"
 	"github.com/Maidang1/herdr-ui/internal/input"
 	"github.com/Maidang1/herdr-ui/internal/session"
@@ -15,6 +16,8 @@ import (
 
 // ActionHooks are platform integrations. All callbacks run on the UI thread.
 type ActionHooks struct {
+	Changes             func(string, func(gitdiff.Changes, error)) func()
+	DiffFile            func(gitdiff.Request, func(gitdiff.Text, error)) func()
 	PaneDetails         func(session.Operation, func(herdr.PaneDetails, error))
 	RenameAgent         func(session.Operation, *string, func(error))
 	Plugins             func(func(herdr.PluginCatalog, error))
@@ -138,6 +141,8 @@ func (w *Window) canShortcut(action string) (bool, bool) {
 	switch action {
 	case "settings", "detach":
 		return true, true
+	case "changes":
+		return true, w.changes.open || w.changesTarget().path != "" && w.hooks.Changes != nil && w.hooks.DiffFile != nil
 	}
 	v := w.currentView()
 	if v.State != session.Ready || v.Stale {
@@ -170,6 +175,9 @@ func (w *Window) dispatchShortcut(action string, index int) bool {
 		return true
 	}
 	switch action {
+	case "changes":
+		w.toggleChanges()
+		return true
 	case "pane_details":
 		w.openDetails()
 		return true

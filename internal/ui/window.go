@@ -45,6 +45,7 @@ type Window struct {
 	navigatorSessions   int
 	settings            settingsUI
 	details             detailsUI
+	changes             changesUI
 	outputWatch         outputWatchUI
 	agentWatch          agentWatchUI
 	extra               ExtraHooks
@@ -145,6 +146,7 @@ func (w *Window) currentView() app.View {
 
 func (w *Window) View(c *native.Context) {
 	w.syncInput()
+	w.syncChanges()
 	w.SyncFeatureTargets()
 	w.syncAgentWatch()
 	w.syncWindowTitle(w.currentView())
@@ -217,6 +219,8 @@ func (w *Window) View(c *native.Context) {
 				}
 				if w.details.open {
 					w.detailsView(c, p)
+				} else if w.changes.open {
+					w.changesView(c, p)
 				} else if w.commandSurfaceState != nil {
 					w.commandSurface(c, p)
 				} else {

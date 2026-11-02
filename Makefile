@@ -7,6 +7,7 @@ build:
 test:
 	python3 -m unittest discover -s scripts -p 'test_*.py'
 	./scripts/go.sh test ./...
+	./scripts/go.sh test github.com/egoist/mygo/plugins/terminal -run '^TestHergoCommandScrollKeepsFontSize$$' -count=1
 	./scripts/go.sh vet ./...
 
 integration: build

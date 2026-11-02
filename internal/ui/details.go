@@ -54,6 +54,7 @@ func (w *Window) openDetails() {
 	if !ok {
 		return
 	}
+	w.closeChanges()
 	w.CloseCommandSurface()
 	w.BlurInput()
 	w.details.open = true

@@ -84,6 +84,12 @@ func (w *Window) SelectTabNumber(n int) {
 // ClosePaneKey closes the focused pane for ⌘W, asking first while an agent
 // runs in it: a stray key must not end an agent's session.
 func (w *Window) ClosePaneKey() {
+	if w.changes.open {
+		if !w.modalOpen() {
+			w.closeChanges()
+		}
+		return
+	}
 	if w.controller == nil || !w.Can("close_pane") {
 		return
 	}
