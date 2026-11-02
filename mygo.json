@@ -1,7 +1,7 @@
 {
   "name": "Hergo",
   "identifier": "dev.herdr.ui",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "icon": "assets/app/icon.png",
   "main": "./cmd/herdr-ui",
   "out": "dist",

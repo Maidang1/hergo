@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.18
+
+- Add a read-only Changes view for workspace changes relative to HEAD, including staged, unstaged, and untracked files. Open it from the toolbar, View menu, command palette, or workspace context menu.
+- Browse continuous file diffs with unified and side-by-side layouts, syntax highlighting, search, manual refresh, and per-workspace view state. Load previews on demand and show notices or bounded patches for binary, non-UTF-8, and large files.
+- On macOS, Command-scroll now scrolls terminal history without changing the font size. Keyboard font-size shortcuts continue to work.
+
+Known limitation: in long file diffs, search can select a result outside the visible area without scrolling it into view. Physical Windows and Linux desktop validation remains outstanding.
+
 ## 0.0.17
 
 - On macOS, `Cmd+Left`/`Cmd+Right` move to the start/end of the line, `Cmd+Backspace` deletes to its start, and `Option+Left`/`Option+Right` move by word, as in Ghostty. Applies to Herdr panes, plain terminals and command views; a Herdr binding on the same key wins.
