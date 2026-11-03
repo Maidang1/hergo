@@ -323,7 +323,7 @@ jobs:
 
           Linux amd64/arm64 (Ubuntu 22.04+): install the matching .deb, or download install.sh and the matching hergo-<version>-linux-<arch>.tar.gz and run `sh install.sh <archive>` as your normal user. GTK 3 is required; WebKitGTK is not. User-local installs support signed in-app updates; .deb installs should be updated with the package manager. Physical X11/Wayland desktop and IME validation remains outstanding.
 
-          Hergo attaches to a running Herdr; install and start Herdr first.
+          Hergo does not bundle Herdr. If Herdr is missing, Hergo offers the official installer or an existing executable. If the default session is not listening, Hergo starts it and leaves it running after the window closes. Explicit sockets and named sessions are left untouched. Plain terminal mode remains available.
           NOTES
             gh release create "$GITHUB_REF_NAME" "${assets[@]}" \
               --verify-tag --title "Hergo $GITHUB_REF_NAME" \
