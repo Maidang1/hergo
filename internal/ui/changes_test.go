@@ -11,18 +11,42 @@ import (
 
 	"github.com/Maidang1/herdr-ui/internal/gitdiff"
 	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/herdr-ui/internal/sidebarinfo"
 	native "github.com/egoist/mygo/ui"
 	"github.com/egoist/mygo/ui/editor"
 )
 
 func changesWindow(t *testing.T) *Window {
 	t.Helper()
+	return openChangesWindow(t, true)
+}
+
+func changesWindowWithoutGit(t *testing.T) *Window {
+	t.Helper()
+	return openChangesWindow(t, false)
+}
+
+func openChangesWindow(t *testing.T, git bool) *Window {
+	t.Helper()
 	w := referenceWindow(t)
 	s, err := session.DecodeSnapshot([]byte(fmt.Sprintf(`{"type":"session_snapshot","snapshot":{"version":"test","protocol":22,"workspaces":[{"workspace_id":"a","label":"API","active_tab_id":"ta"},{"workspace_id":"b","label":"Web","active_tab_id":"tb"}],"tabs":[{"workspace_id":"a","tab_id":"ta","number":1,"label":"Agent"},{"workspace_id":"b","tab_id":"tb","number":1,"label":"Build"}],"panes":[{"pane_id":"pa","terminal_id":"term-a","workspace_id":"a","tab_id":"ta","cwd":%q},{"pane_id":"pb","terminal_id":"term-b","workspace_id":"b","tab_id":"tb","cwd":%q}],"layouts":[],"agents":[]}}`, filepath.Join(t.TempDir(), "api"), filepath.Join(t.TempDir(), "web"))))
 	if err != nil {
 		t.Fatal(err)
 	}
-	w.app.Update(session.PublishedSnapshot{TargetID: 1, Epoch: 1, State: session.Ready, Snapshot: s})
+	published := session.PublishedSnapshot{TargetID: 1, Epoch: 1, State: session.Ready, Snapshot: s}
+	w.app.Update(published)
+	if !git {
+		return w
+	}
+	entries := map[string]sidebarinfo.Entry{}
+	for _, ws := range sidebarinfo.BuildSource(published).Workspaces {
+		root := ws.Path
+		if root == "" {
+			root = string(filepath.Separator)
+		}
+		entries[ws.ID] = sidebarinfo.Entry{Fingerprint: sidebarinfo.Fingerprint(ws), Info: sidebarinfo.Info{RepoRoot: root, GitKnown: true, Branch: "main"}}
+	}
+	w.app.UpdateSidebar(sidebarinfo.Publication{TargetID: 1, Entries: entries})
 	return w
 }
 
@@ -50,7 +74,7 @@ func TestChangesViewSelectionLayoutRefreshAndReadOnly(t *testing.T) {
 		return load(dir, done)
 	}
 	tester := native.NewTester(w.View, 1200, 800)
-	if err := tester.Click("Toggle changes"); err != nil {
+	if err := tester.Click("Show changes"); err != nil {
 		t.Fatal(err)
 	}
 	tester.Frame()
@@ -395,6 +419,95 @@ func TestChangesContinuousFileFailuresDoNotHideOtherDiffs(t *testing.T) {
 	}
 	if d := w.changes.previews[files[2].Path].diff; d == nil || !d.FitContent || d.Editable {
 		t.Fatal("valid patch after file failures was not shown as a read-only diff")
+	}
+}
+
+func TestChangesHiddenOutsideGitRepository(t *testing.T) {
+	w := changesWindowWithoutGit(t)
+	changesFixture(w)
+	tester := native.NewTester(w.View, 1200, 800)
+	if _, ok := tester.Find("Show changes"); ok {
+		t.Fatal("git control shown outside a repository")
+	}
+	w.Dispatch("changes")
+	if w.changes.open {
+		t.Fatal("opened changes outside a repository")
+	}
+	if err := tester.RightClick("Web"); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if err := tester.ChooseMenuItem("Show Changes"); err == nil {
+		t.Fatal("workspace menu offered changes outside a repository")
+	}
+}
+
+func TestCommitSelectionShowsThatCommit(t *testing.T) {
+	w := changesWindow(t)
+	changesFixture(w)
+	hash := strings.Repeat("b", 40)
+	parent := strings.Repeat("c", 40)
+	other := strings.Repeat("d", 40)
+	var seen []string
+	w.hooks.Commits = func(dir string, done func([]gitdiff.Commit, error)) func() {
+		done([]gitdiff.Commit{{Hash: hash, Subject: "Add server", Author: "Ada", Time: 1_700_000_000}}, nil)
+		return func() {}
+	}
+	w.hooks.CommitChanges = func(dir, got string, done func(gitdiff.Changes, error)) func() {
+		seen = append(seen, got)
+		files := []gitdiff.File{{Path: "old.go", Status: "Modified", Added: 1, Removed: 1}}
+		if got == other {
+			files = []gitdiff.File{{Path: "other.go", Status: "Added", Added: 1}}
+		}
+		done(gitdiff.Changes{Root: dir, Base: parent, Commit: got, Files: files}, nil)
+		return func() {}
+	}
+	w.hooks.DiffFile = func(req gitdiff.Request, done func(gitdiff.Text, error)) func() {
+		if req.Commit == "" {
+			done(gitdiff.Text{Old: "package server\n", New: "package server\n\nfunc port() int { return 8080 }\n"}, nil)
+			return func() {}
+		}
+		if req.Commit != hash && req.Commit != other || req.Base != parent {
+			t.Fatalf("diff request %+v", req)
+		}
+		done(gitdiff.Text{Old: "a\n", New: "b\n"}, nil)
+		return func() {}
+	}
+	w.Dispatch("changes")
+	tester := native.NewTester(w.View, 1200, 800)
+	tester.Frame()
+	if _, ok := tester.Find("Commit " + hash); !ok {
+		t.Fatal("history did not list the commit")
+	}
+	if err := tester.Click("Commit " + hash); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if w.changes.revision != hash || w.changes.selected != "old.go" || len(seen) != 1 {
+		t.Fatal("commit selection did not load that commit", w.changes.revision, w.changes.selected, seen)
+	}
+	if !tester.HasText("old.go") || !tester.HasText("Add server") {
+		t.Fatal("commit diff was not shown", tester.Texts())
+	}
+	if err := tester.Click("Uncommitted changes"); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if w.changes.revision != "" || w.changes.selected != "internal/server.go" {
+		t.Fatal("uncommitted changes did not return", w.changes.revision, w.changes.selected)
+	}
+	w.changes.commits = append(w.changes.commits, gitdiff.Commit{Hash: other, Subject: "Other"})
+	w.selectRevision(other)
+	tester.Frame()
+	w.app.SelectWorkspace("b")
+	tester.Frame()
+	if w.changes.revision != "" {
+		t.Fatal("commit selection followed another workspace")
+	}
+	w.app.SelectWorkspace("a")
+	tester.Frame()
+	if w.changes.revision != other || w.changes.selected != "other.go" {
+		t.Fatal("workspace did not restore its commit", w.changes.revision, w.changes.selected)
 	}
 }
 

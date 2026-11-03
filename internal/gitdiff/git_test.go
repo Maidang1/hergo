@@ -2,6 +2,7 @@ package gitdiff
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -205,6 +206,66 @@ func TestPathBoundariesAndSymlinks(t *testing.T) {
 	got := readFixture(t, listFixture(t, root), "link")
 	if got.New == "outside\n" || !strings.Contains(got.New, "private.txt") {
 		t.Fatal("read a symlink's target instead of its link text", got)
+	}
+}
+
+func commitAll(t *testing.T, root, message string, when int64) string {
+	t.Helper()
+	gitFixture(t, root, "", "add", "--all")
+	tree := gitFixture(t, root, "", "write-tree")
+	parent := gitFixture(t, root, "", "rev-parse", "HEAD")
+	body := fmt.Sprintf("tree %s\nparent %s\nauthor Fixture <fixture@example.invalid> %d +0000\ncommitter Fixture <fixture@example.invalid> %d +0000\n\n%s\n", tree, parent, when, when, message)
+	oid := gitFixture(t, root, body, "hash-object", "-t", "commit", "-w", "--stdin")
+	gitFixture(t, root, "", "update-ref", "refs/heads/main", oid)
+	return oid
+}
+
+func TestCommitHistoryReadsThatCommitNotTheWorkingTree(t *testing.T) {
+	empty := t.TempDir()
+	gitFixture(t, empty, "", "init", "-b", "main")
+	root := repoFixture(t, map[string]string{"file.txt": "one\n"})
+	first := gitFixture(t, root, "", "rev-parse", "HEAD")
+	writeFixture(t, root, "file.txt", "two\n")
+	writeFixture(t, root, "added.txt", "new\n")
+	second := commitAll(t, root, "second change", 2)
+	writeFixture(t, root, "file.txt", "three\n")
+	writeFixture(t, root, "dirty.txt", "dirty\n")
+	t.Setenv("GIT_DIR", "/not/this/repo")
+
+	commits, err := Log(context.Background(), root)
+	if err != nil || len(commits) != 2 || commits[0].Hash != second || commits[0].Subject != "second change" || commits[0].Author != "Fixture" || commits[0].Time != 2 || commits[1].Hash != first {
+		t.Fatal(err, commits)
+	}
+	list, err := ListCommit(context.Background(), root, second)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if list.Commit != second || list.Base != first || len(list.Files) != 2 || list.Files[0].Path != "added.txt" || list.Files[0].Status != "Added" || list.Files[1].Path != "file.txt" || list.Files[1].Status != "Modified" {
+		t.Fatal(list)
+	}
+	got, err := Read(context.Background(), Request{Root: list.Root, Base: list.Base, Commit: list.Commit, File: list.Files[1]})
+	if err != nil || got.Old != "one\n" || got.New != "two\n" {
+		t.Fatal(err, got)
+	}
+	rootList, err := ListCommit(context.Background(), root, first)
+	if err != nil || len(rootList.Files) != 1 || rootList.Files[0].Path != "file.txt" || rootList.Files[0].Status != "Added" {
+		t.Fatal(err, rootList.Files)
+	}
+	got, err = Read(context.Background(), Request{Root: rootList.Root, Base: rootList.Base, Commit: rootList.Commit, File: rootList.Files[0]})
+	if err != nil || got.Old != "" || got.New != "one\n" {
+		t.Fatal("root commit followed the working tree", err, got)
+	}
+	if _, err := ListCommit(context.Background(), root, strings.Repeat("c", 40)); err == nil {
+		t.Fatal("accepted a missing commit")
+	}
+	if _, err := ListCommit(context.Background(), root, "HEAD"); err == nil {
+		t.Fatal("accepted a revision expression")
+	}
+	if _, err := Log(context.Background(), t.TempDir()); err == nil {
+		t.Fatal("accepted a non-repository")
+	}
+	if got, err := Log(context.Background(), empty); err != nil || len(got) != 0 {
+		t.Fatal(err, got)
 	}
 }
 

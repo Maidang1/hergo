@@ -25,12 +25,30 @@ func featureIdentity(s *session.Session, op session.Operation) bool {
 	pane, ok := p.Snapshot.Pane(op.PaneID)
 	return ok && pane.TerminalID == op.TerminalID && pane.TabID == op.TabID && pane.WorkspaceID == op.WorkspaceID
 }
-func installFeatureHooks(h *view.ActionHooks, ctx context.Context, s *session.Session, target herdr.Target, screen *view.Window, post func(func()), binary string) {
+func installFeatureHooks(h *view.ActionHooks, ctx context.Context, s *session.Session, target herdr.Target, screen *view.Window, post func(func()), binary func() string) {
 	h.Changes = func(dir string, done func(gitdiff.Changes, error)) func() {
 		call, cancel := context.WithCancel(ctx)
 		go func() {
 			defer cancel()
 			changes, err := gitdiff.List(call, dir)
+			post(func() { done(changes, err) })
+		}()
+		return cancel
+	}
+	h.Commits = func(dir string, done func([]gitdiff.Commit, error)) func() {
+		call, cancel := context.WithCancel(ctx)
+		go func() {
+			defer cancel()
+			commits, err := gitdiff.Log(call, dir)
+			post(func() { done(commits, err) })
+		}()
+		return cancel
+	}
+	h.CommitChanges = func(dir, hash string, done func(gitdiff.Changes, error)) func() {
+		call, cancel := context.WithCancel(ctx)
+		go func() {
+			defer cancel()
+			changes, err := gitdiff.ListCommit(call, dir, hash)
 			post(func() { done(changes, err) })
 		}()
 		return cancel
@@ -125,7 +143,7 @@ func installFeatureHooks(h *view.ActionHooks, ctx context.Context, s *session.Se
 		go func() {
 			call, cancel := context.WithTimeout(ctx, 20*time.Second)
 			defer cancel()
-			catalog, err := herdr.ReadMachineCatalog(call, binary)
+			catalog, err := herdr.ReadMachineCatalog(call, binary())
 			post(func() { done(catalog, err) })
 		}()
 	}
@@ -134,20 +152,20 @@ func installFeatureHooks(h *view.ActionHooks, ctx context.Context, s *session.Se
 		if err != nil {
 			return err
 		}
-		return screen.OpenReviewCommandSurface("Herdr machines and sessions", append([]string{binary}, args...), herdr.CatalogEnvironment(os.Environ()), "")
+		return screen.OpenReviewCommandSurface("Herdr machines and sessions", append([]string{binary()}, args...), herdr.CatalogEnvironment(os.Environ()), "")
 	}
 	h.PluginInstall = func(source string, update bool) error {
 		if !update && (strings.TrimSpace(source) == "" || strings.HasPrefix(source, "-") || strings.ContainsAny(source, "\x00\r\n")) {
 			return fmt.Errorf("enter a GitHub repository such as owner/repo")
 		}
-		_, env, err := target.Attach(binary, "plugin-manager", os.Environ())
+		_, env, err := target.Attach(binary(), "plugin-manager", os.Environ())
 		if err != nil {
 			return err
 		}
 		if update {
-			return screen.OpenReviewCommandSurface("Update Herdr plugins", []string{binary, "plugin", "update"}, env, "")
+			return screen.OpenReviewCommandSurface("Update Herdr plugins", []string{binary(), "plugin", "update"}, env, "")
 		}
-		return screen.OpenReviewCommandSurface("Install Herdr plugin", []string{binary, "plugin", "install", source}, env, "")
+		return screen.OpenReviewCommandSurface("Install Herdr plugin", []string{binary(), "plugin", "install", source}, env, "")
 	}
 }
 

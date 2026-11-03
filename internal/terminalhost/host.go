@@ -573,11 +573,26 @@ func (h *Host) Close(ctx context.Context) error {
 		return h.closeErr
 	}
 }
+
+// SetBinary remembers the Herdr executable later attaches run. The setup
+// screen can find that executable after the host already exists.
+func (h *Host) SetBinary(path string) {
+	if path == "" {
+		return
+	}
+	h.mu.Lock()
+	h.cfg.Binary = path
+	h.mu.Unlock()
+}
+
 func (h *Host) options(e *entry) (terminal.Options, error) {
+	h.mu.Lock()
+	binary := h.cfg.Binary
+	h.mu.Unlock()
 	var cmd, env []string
 	if h.surface == nil {
 		var err error
-		cmd, env, err = h.cfg.Target.Attach(h.cfg.Binary, e.spec.TerminalID, h.cfg.Env)
+		cmd, env, err = h.cfg.Target.Attach(binary, e.spec.TerminalID, h.cfg.Env)
 		if err != nil {
 			return terminal.Options{}, err
 		}

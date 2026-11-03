@@ -3,8 +3,13 @@
 Linux amd64 (x86_64) and arm64 (aarch64) builds use the pinned mygo GTK 3
 backend and the same Unix socket / `herdr terminal attach` path as macOS.
 The default terminal is the PTY-backed Ghostty terminal plugin, not the
-Windows endpoint-cell renderer. Herdr must already be installed and running;
-launching the application does not start or take over your daemon.
+Windows endpoint-cell renderer. Hergo does not bundle Herdr. When Herdr is
+installed and you did not pass `-socket` or a named `HERDR_SESSION`, launching
+the application starts `herdr server` if that default session is not already
+listening, and leaves the server running when the window closes. A missing
+Herdr opens a setup window that can run the official installer or use an
+executable you choose. The application does not take over an existing terminal
+owner.
 
 The validation baseline is Ubuntu 22.04 or newer, with glibc and GTK 3. Other
 Linux distributions with these libraries may work, but are not the CI baseline.

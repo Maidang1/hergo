@@ -52,6 +52,14 @@ func runStateWindow(socket, binary string, closeAfter time.Duration, nativeSurfa
 	if found := install.Get(); found.Path != "" {
 		resolvedBinary = found.Path
 	}
+	// Herdr can be installed, or a path chosen, after this window exists.
+	// Hooks that run it read the path then, not the one found at launch.
+	herdrPath := func() string {
+		if p := install.Get().Path; p != "" {
+			return p
+		}
+		return binary
+	}
 	var host *terminalhost.Host
 	var sidebar *sidebarinfo.Collector
 	var notifier *notifier
@@ -104,25 +112,37 @@ func runStateWindow(socket, binary string, closeAfter time.Duration, nativeSurfa
 			go func() {
 				defer startup.Done()
 				defer starting.Store(false)
+				publish := func(message string) {
+					if closed.Load() {
+						return
+					}
+					win.Update(func() {
+						if !closed.Load() {
+							a.Update(session.PublishedSnapshot{State: session.Incompatible, Stale: true, Error: message})
+						}
+					})
+				}
 				found := install.Refresh(ctx)
 				if found.Path == "" {
-					if !closed.Load() {
-						win.Update(func() {
-							if !closed.Load() {
-								a.Update(session.PublishedSnapshot{State: session.Incompatible, Stale: true, Error: herdr.ErrNotInstalled.Error()})
-							}
-						})
-					}
+					publish(herdr.ErrNotInstalled.Error())
+					return
+				}
+				if host != nil {
+					host.SetBinary(found.Path)
+				}
+				// An explicit socket or named session is the caller's. The
+				// default session is started when it is not already listening,
+				// and left running after this window closes.
+				if err := herdr.EnsureServer(ctx, herdr.ServerOptions{
+					Binary: found.Path,
+					Target: target,
+					Start:  herdr.OwnsDefaultServer(socket, os.Getenv("HERDR_SOCKET_PATH"), os.Getenv("HERDR_SESSION")),
+				}); err != nil {
+					publish(err.Error())
 					return
 				}
 				if err := baseline(ctx, found.Path); err != nil {
-					if !closed.Load() {
-						win.Update(func() {
-							if !closed.Load() {
-								a.Update(session.PublishedSnapshot{State: session.Incompatible, Stale: true, Error: err.Error()})
-							}
-						})
-					}
+					publish(err.Error())
 					return
 				}
 				if closed.Load() {
@@ -189,7 +209,7 @@ func runStateWindow(socket, binary string, closeAfter time.Duration, nativeSurfa
 			settingsWin.OnClosed(func() { settingsWin = nil })
 		}
 		keyboard := &keyboardEndpoint{}
-		hooks := keyboardHooks(ctx, s, keyboard, screen, post, func() { win.Close() }, resolvedBinary, target)
+		hooks := keyboardHooks(ctx, s, keyboard, screen, post, func() { win.Close() }, herdrPath, target)
 		hooks.Settings = func() error { openSettings(); return nil }
 		integrationPost := func(fn func()) {
 			post(func() {
@@ -211,9 +231,49 @@ func runStateWindow(socket, binary string, closeAfter time.Duration, nativeSurfa
 				integrationPost(func() { done(messages, err) })
 			}()
 		}
-		installFeatureHooks(&hooks, ctx, s, target, screen, integrationPost, resolvedBinary)
+		installFeatureHooks(&hooks, ctx, s, target, screen, integrationPost, herdrPath)
 		extra := installExtraHooks(ctx, s, target, integrationPost, settings, install.Get, resolvedBinary)
 		extra.WindowTitle = func(title string) { win.SetTitle(title) }
+		extra.InstallHerdr = func(done func(error)) {
+			go func() {
+				err := herdr.Install(ctx)
+				if err != nil {
+					post(func() { done(err) })
+					return
+				}
+				install.Use("herdr")
+				found := install.Refresh(ctx)
+				err = readyInstallation(found)
+				if errors.Is(err, herdr.ErrNotInstalled) {
+					err = fmt.Errorf("Herdr installed, but Hergo could not find it. Choose the executable instead")
+				}
+				post(func() { done(err) })
+			}()
+		}
+		extra.ChooseHerdr = func(done func(error)) {
+			go func() {
+				opts := mygo.OpenDialogOptions{Parent: win, Title: "Choose Herdr", ButtonLabel: "Use Herdr", Message: "Select the herdr executable."}
+				if runtime.GOOS == "windows" {
+					opts.Filters = []mygo.FileFilter{{Name: "Programs", Extensions: []string{"exe"}}}
+				}
+				paths, err := mygo.Dialog.Open(opts)
+				if err != nil {
+					post(func() { done(err) })
+					return
+				}
+				if len(paths) == 0 {
+					post(func() { done(herdr.ErrSetupCanceled) })
+					return
+				}
+				install.Use(paths[0])
+				found := install.Refresh(ctx)
+				err = readyInstallation(found)
+				if errors.Is(err, herdr.ErrNotInstalled) {
+					err = fmt.Errorf("%s is not a usable Herdr executable", paths[0])
+				}
+				post(func() { done(err) })
+			}()
+		}
 		extra.PlainTerminal = func() error {
 			openPlainWindow(plainWindowConfig{settings: settings, install: install, connect: func() error { win.Focus(); return nil }})
 			return nil
@@ -228,7 +288,7 @@ func runStateWindow(socket, binary string, closeAfter time.Duration, nativeSurfa
 				}
 			}()
 		}
-		hooks.EditConfig = func() error { return editHerdrConfig(resolvedBinary, target, screen) }
+		hooks.EditConfig = func() error { return editHerdrConfig(herdrPath(), target, screen) }
 		hooks.Font = func(f terminal.Font) {
 			host.SetFont(f)
 			persist(func(v *prefs.Settings) {
@@ -527,6 +587,16 @@ func runStateWindow(socket, binary string, closeAfter time.Duration, nativeSurfa
 	case <-shutdown.Done():
 		log.Print("CLI startup cleanup exceeded shared shutdown budget")
 	}
+}
+
+func readyInstallation(found herdr.Installation) error {
+	if found.Installed() {
+		return nil
+	}
+	if found.Error != "" {
+		return errors.New(found.Error)
+	}
+	return herdr.ErrNotInstalled
 }
 
 func baseline(ctx context.Context, binary string) error {

@@ -17,6 +17,8 @@ import (
 // ActionHooks are platform integrations. All callbacks run on the UI thread.
 type ActionHooks struct {
 	Changes             func(string, func(gitdiff.Changes, error)) func()
+	Commits             func(string, func([]gitdiff.Commit, error)) func()
+	CommitChanges       func(string, string, func(gitdiff.Changes, error)) func()
 	DiffFile            func(gitdiff.Request, func(gitdiff.Text, error)) func()
 	PaneDetails         func(session.Operation, func(herdr.PaneDetails, error))
 	RenameAgent         func(session.Operation, *string, func(error))
@@ -142,7 +144,9 @@ func (w *Window) canShortcut(action string) (bool, bool) {
 	case "settings", "detach":
 		return true, true
 	case "changes":
-		return true, w.changes.open || w.changesTarget().path != "" && w.hooks.Changes != nil && w.hooks.DiffFile != nil
+		target := w.changesTarget()
+		git := w.workspaceRepo(target.workspace)
+		return true, w.changes.open || (git && target.path != "" && w.hooks.Changes != nil && w.hooks.DiffFile != nil)
 	}
 	v := w.currentView()
 	if v.State != session.Ready || v.Stale {

@@ -10,27 +10,28 @@ Hergo 取名自 **Her**dr 与 my**go**。使用 Go 和 [mygo](https://github.com
 
 - **工作区与工作树**：浏览已有会话，查看分支、ahead/behind 和本地监听端口，通过菜单管理工作区与 worktree。
 - **多窗格终端**：切换标签、水平或垂直分屏、调整比例、方向导航，以及放大和恢复窗格。
-- **代码改动查看**：通过工具栏 Changes、View → Show Changes 或工作区右键菜单查看相对 HEAD 的全部未提交改动，包含已暂存、未暂存与未跟踪文件；支持单栏、左右对照、语法高亮、搜索和手动刷新。
+- **代码改动查看**：Git 仓库的工具栏显示 Git 图标，不是 Git 仓库时不显示。可查看相对 HEAD 的未提交改动，也可点历史提交查看该次改动；支持单栏、左右对照、语法高亮、搜索和手动刷新。
 - **Agent 状态与详情**：按工作区聚合 agent，查看检测诊断、进程与会话引用，独立命名 agent，配置通知、输出匹配提醒与 agent 集成。
 - **Herdr 管理入口**：设置内管理插件、会话恢复配置与保存的 SSH 机器；通过独立命令终端交互安装插件、连接远程或打开本地命名会话。
 - **键盘与鼠标入口**：保留 Herdr prefix 模式，提供命令面板、快捷键参考、右键菜单和双击重命名。
 - **终端体验**：文字选择与复制粘贴、查找、清屏、字体缩放、文件路径打开和 Zen 模式；具体能力因平台而异。
 - **Agent 交互**：在菜单或命令面板给 agent 发送 prompt、在 agent 停下（完成/等待/空闲）时提醒一次、在 pane 中启动 agent；侧栏按视图（全部 / 需要处理 / 工作中 / 当前工作区）筛选 agent，并与 Herdr 客户端共享。
 - **整理与布局**：拖拽侧栏工作区和标签重新排序；把 pane 移到新标签、新工作区或其他标签；保存标签布局并以新标签重新打开。
-- **纯净终端模式**：未安装 Herdr 时自动以普通终端打开（本地 shell + 标签），右上角状态提示可查看安装说明，安装后一键回到 Herdr。
+- **纯净终端模式**：本地 shell 与标签。可从菜单打开，或在设置里选为下次启动方式。
 - **原生外观与更新**：System / Light / Dark 主题、持久化偏好，以及支持 Ed25519 校验的应用内更新。
 
-### Herdr 检测与纯净模式
+### Herdr 检测与启动
 
-启动时 Hergo 在 PATH 与常见安装目录（`~/.local/bin`、`~/.cargo/bin`、Homebrew 等）中查找 `herdr`：
+启动时 Hergo 在 PATH 与常见安装目录（`~/.local/bin`、`~/.cargo/bin`、Homebrew，以及 Windows 的 `%LOCALAPPDATA%\Programs\Herdr\bin`）中查找 `herdr`。从 Dock 或 Finder 打开时，也会补上登录 shell 的 PATH。
 
-- **已安装**：连接 Herdr，显示工作区、标签与 agent。
-- **未安装**：默认以**纯净终端**打开——只有标签条与本地 shell，没有侧栏。右上角的 “Herdr not installed” 状态点可查看安装说明、重新检测；安装后点 **Open Herdr Workspaces** 即可切回。
-- 若强制以 Herdr 模式启动但未安装，主窗口显示安装说明、**Check Again** 与 **Open Plain Terminal**。
+- **已安装，默认会话已在监听**：直接连接，显示工作区、标签与 agent。
+- **已安装，默认会话没有在监听**：后台启动 `herdr server`，等到套接字可连接后再进入。已经在监听时不会再启动第二个。关闭窗口不停止这个服务。
+- **未安装**：打开安装页，可以安装官方 Herdr、选择本机已有的可执行文件、查看安装说明，或改用纯净终端。
+- 指定了 `-socket`、`HERDR_SOCKET_PATH` 或具名 `HERDR_SESSION` 时，只连接该会话，不启动服务。
 
-**Settings → Herdr → Startup** 选择 Automatic（默认）、Herdr 或 Plain terminal。命令行 `-plain` 本次以纯净终端打开，`-connect` 本次强制连接 Herdr。纯净终端快捷键：macOS 为 `Cmd+T` / `Cmd+W` / `Cmd+Shift+[ ]` / `Cmd+1…9`，其他平台为 `Ctrl+Shift+` 同名键，`Ctrl+Tab` 切换标签；单独的 Ctrl 组合键始终交给 shell。Herdr 模式下也可从 **Hergo → New Plain Terminal Window** 打开纯净终端窗口。
+**Settings → Herdr → Startup** 选择 Automatic（默认）、Herdr 或 Plain terminal。Automatic 与 Herdr 都打开 Herdr 窗口；未安装时停在安装页。Plain terminal 以及命令行 `-plain` 本次以纯净终端打开，`-connect` 本次强制打开 Herdr 窗口。纯净终端快捷键：macOS 为 `Cmd+T` / `Cmd+W` / `Cmd+Shift+[ ]` / `Cmd+1…9`，其他平台为 `Ctrl+Shift+` 同名键，`Ctrl+Tab` 切换标签；单独的 Ctrl 组合键始终交给 shell。Herdr 模式下也可从 **Hergo → New Plain Terminal Window** 打开纯净终端窗口。
 
-Hergo 连接已经运行的 Herdr，**不会自动启动守护进程、创建工作区或接管已有终端 owner**。普通浏览保持窗口本地选择；需要改变会话的操作按 Herdr 语义执行。
+Hergo 不携带 Herdr 可执行文件。它使用本机安装的 Herdr，并在默认会话未运行时启动它。普通浏览保持窗口本地选择；需要改变会话的操作按 Herdr 语义执行。关闭窗口只释放本应用的连接，不关闭 Herdr 会话，也不停止 Herdr 服务，也不接管已有终端 owner。
 
 通过 **Pane → Agent and Process Details** 查看所选终端详情；**Pane → Notify When Output Matches** 设置一次输出提醒。提醒匹配最近 80 行，已有匹配会立即触发；Details 内可选 Rust 正则与 1–1440 分钟超时，默认 30 分钟。提醒可取消，连接或终端身份变化时结束，不自动重复。
 
@@ -38,7 +39,7 @@ Hergo 连接已经运行的 Herdr，**不会自动启动守护进程、创建工
 
 ## 安装
 
-先安装并启动 [Herdr](https://github.com/herdrdev/herdr)，再从 [GitHub Releases](https://github.com/Maidang1/herdr-ui/releases) 下载对应平台的应用。Windows 和 Linux 的 CI 集成测试使用 Herdr 0.9.5；API 接入以实际运行的 Herdr 版本为准。
+从 [GitHub Releases](https://github.com/Maidang1/herdr-ui/releases) 安装 Hergo 后即可打开。尚未安装 [Herdr](https://github.com/herdrdev/herdr) 时，窗口里的 **Install Herdr** 会运行官方安装脚本（Unix 为 [install.sh](https://herdr.dev/install.sh)，Windows 为 [install.ps1](https://herdr.dev/install.ps1)）。也可以选择本机已有的 `herdr`。Windows 和 Linux 的 CI 集成测试使用 Herdr 0.9.5；API 接入以实际运行的 Herdr 版本为准。
 
 | 平台 | 安装包 | 说明 |
 | --- | --- | --- |
@@ -95,9 +96,9 @@ Windows 使用原生 endpoint 渲染，不启动 `herdr terminal attach`。快�
 
 ### 查看代码改动
 
-在工作区工具栏点击 **Changes**，或选择 **View → Show Changes**。右侧按文件连续展示只读 diff，直接滚动即可查看所有改动；左侧文件列表用于快速跳转。**Unified / Split** 切换单栏与左右对照，**Refresh** 重新读取磁盘上的最新改动。已暂存和未暂存改动合并显示，未跟踪文件按新增内容预览，忽略的文件不列入。
+在 Git 仓库中，工作区工具栏右侧是 Git 图标。不是 Git 仓库时不显示。点击图标，或选择 **View → Show Changes**。左侧上方是未提交改动和最近 100 条提交，点一条提交查看它相对第一个父提交的改动；左侧下方是文件列表。右侧按文件连续展示只读 diff，直接滚动即可查看所有改动。**Unified / Split** 切换单栏与左右对照，**Refresh** 重新读取磁盘上的最新改动。已暂存和未暂存改动合并显示，未跟踪文件按新增内容预览，忽略的文件不列入。
 
-在 diff 中使用查找快捷键搜索当前文件。点击 **Terminal**、按 Esc 或关闭快捷键可返回终端；终端会话继续运行。Changes 的显示状态、选中文件和对照方式按工作区记忆：切到其他工作区时显示该工作区自己的视图，切回来恢复原来的文件位置并重新读取改动。文件按可见范围加载；二进制或非 UTF-8 文件显示提示；超过 1 MiB 的文件在可用时显示有界 patch。第一版只读，不提供暂存、撤销或写回文件。
+在 diff 中使用查找快捷键搜索当前文件。再次点击 Git 图标、按 Esc 或关闭按钮可返回终端；终端会话继续运行。显示状态、选中的提交、文件和对照方式按工作区记忆：切到其他工作区时显示该工作区自己的视图，切回来恢复原来的位置并重新读取改动。文件按可见范围加载；二进制或非 UTF-8 文件显示提示；超过 1 MiB 的文件在可用时显示有界 patch。只读，不提供暂存、撤销或写回文件。
 
 ### 配色
 
@@ -125,7 +126,7 @@ Hergo Light 和 Hergo Dark 分别固定使用 Hergo 自带的浅色与深色；�
 
 ## 开发
 
-需要 `go.mod` 指定的 Go 版本（当前为 1.27.1）、Python 3.10+，以及运行原生窗口所需的平台环境。连接真实会话时，Herdr 必须已安装并运行。
+需要 `go.mod` 指定的 Go 版本（当前为 1.27.1）、Python 3.10+，以及运行原生窗口所需的平台环境。本机已安装 Herdr 且没有用 `-socket` 指定会话时，Hergo 会在默认服务未运行时启动它。集成测试传入 `-socket`，因此不会启动用户自己的服务。
 
 ```sh
 git clone https://github.com/Maidang1/herdr-ui.git
@@ -141,7 +142,7 @@ make run
 | --- | --- |
 | `make test` | Python 发布契约测试、Go 测试和 vet |
 | `make build` | 构建当前平台可执行文件，输出到 `bin/` |
-| `make run` | 构建并连接已有 Herdr 会话 |
+| `make run` | 构建并打开 Hergo |
 | `make probe` | 只读检查 Herdr、配置与布局，不占用终端 |
 | `make window` | 本地 `/bin/cat` 输入测试窗口，不连接 Herdr |
 | `make integration` | 临时隔离服务、真实终端插件与原生窗口验证 |

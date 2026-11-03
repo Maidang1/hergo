@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"errors"
 	"strings"
 
 	"github.com/Maidang1/herdr-ui/internal/app"
@@ -50,7 +51,7 @@ func (w *Window) settingsHerdr(c *native.Context, p design.Palette) {
 	if w.extra.Installation != nil {
 		install = w.extra.Installation()
 	}
-	w.settingsSection(c, "settings-herdr-install", "Herdr", "Hergo connects to a running Herdr. Without it, Hergo opens as a plain terminal.", p, func(g *settingsGroup) {
+	w.settingsSection(c, "settings-herdr-install", "Herdr", "Hergo uses the Herdr installed on this machine. It starts Herdr when the default session is not already running, and leaves it running when this window closes.", p, func(g *settingsGroup) {
 		status, detail := "Not installed", "Install Herdr to manage workspaces, worktrees and agents."
 		if install.Installed() {
 			status, detail = fallback(install.Version, "Installed"), install.Path
@@ -62,7 +63,7 @@ func (w *Window) settingsHerdr(c *native.Context, p design.Palette) {
 				c.OpenURL(herdr.InstallURL)
 			}
 		})
-		g.row("Startup", "Automatic connects to Herdr when it is installed and opens a plain terminal otherwise. Applies the next time Hergo opens.", func() {
+		g.row("Startup", "Automatic opens Herdr, and offers to install it when it is missing. Plain terminal stays available. Applies the next time Hergo opens.", func() {
 			index := indexOf(startupModes, w.startupMode, 0)
 			if native.Segmented(c.Key("settings-startup-mode"), &index, startupModeLabels...).Shrink(0).Changed() {
 				w.startupMode = startupModes[max(0, min(len(startupModes)-1, index))]
@@ -174,7 +175,7 @@ func herdrMissing(v app.View) bool {
 }
 
 // herdrMissingView is the window's welcome when Herdr is not installed:
-// what Herdr adds, how to get it, and the plain terminal meanwhile.
+// install it, point at one that is already installed, or use a plain terminal.
 func (w *Window) herdrMissingView(c *native.Context, p design.Palette) {
 	native.Column(c.Key("herdr-missing")).Grow(1).FillWidth().Center().Padding(32).Children(func() {
 		native.Column(c).Width(420).Gap(16).AlignItems(native.Stretch).Children(func() {
@@ -182,18 +183,31 @@ func (w *Window) herdrMissingView(c *native.Context, p design.Palette) {
 				native.Icon(c, icons.Terminal).Size(22, 22).TextColor(p.Secondary)
 				native.Text(c, "Herdr is not installed").FontSize(18).Bold()
 			})
-			native.Text(c, "Hergo is a window for Herdr's workspaces, Git worktrees and coding agents. Install Herdr, start it, then check again — or keep working in a plain terminal.").FontSize(13).TextColor(p.Secondary).FillWidth()
+			native.Text(c, "Herdr runs your workspaces and keeps them when this window closes. Hergo can install it, or use a Herdr you already have.").FontSize(13).TextColor(p.Secondary).FillWidth()
 			native.Column(c).Gap(8).AlignItems(native.Stretch).Children(func() {
+				busy := w.setupBusy
+				if native.PrimaryButton(c, "Install Herdr").FillWidth().Disabled(busy || w.extra.InstallHerdr == nil).Clicked() {
+					w.beginHerdrSetup("Installing Herdr…", w.extra.InstallHerdr)
+				}
+				if native.Button(c, "Choose Herdr…").FillWidth().Disabled(busy || w.extra.ChooseHerdr == nil).Clicked() {
+					w.beginHerdrSetup("Looking for Herdr…", w.extra.ChooseHerdr)
+				}
 				if native.Button(c, "Installation Guide").FillWidth().Clicked() {
 					c.OpenURL(herdr.InstallURL)
 				}
-				if native.Button(c, "Check Again").FillWidth().Clicked() && w.retry != nil {
+				if native.Button(c, "Check Again").FillWidth().Disabled(busy).Clicked() && w.retry != nil {
 					w.retry()
 				}
 				if native.Button(c, "Open Plain Terminal").FillWidth().Disabled(w.extra.PlainTerminal == nil).Clicked() {
 					w.shortcutError(w.extra.PlainTerminal())
 				}
 			})
+			if w.setupLabel != "" {
+				native.Text(c, w.setupLabel).FontSize(12).TextColor(p.Secondary).FillWidth()
+			}
+			if w.setupError != "" {
+				native.Text(c, w.setupError).FontSize(12).TextColor(p.Danger).FillWidth()
+			}
 			always := w.startupMode == "plain"
 			if native.Checkbox(c.Key("herdr-missing-always-plain"), &always, "Open as a plain terminal next time").Changed() {
 				w.startupMode = "auto"
@@ -205,5 +219,32 @@ func (w *Window) herdrMissingView(c *native.Context, p design.Palette) {
 				}
 			}
 		})
+	})
+}
+
+// beginHerdrSetup marks the setup screen busy and runs install or choose.
+// done runs on the UI thread. A nil error connects; a canceled file dialog
+// leaves the screen as it was.
+func (w *Window) beginHerdrSetup(label string, run func(func(error))) {
+	if run == nil || w.setupBusy {
+		return
+	}
+	w.setupBusy = true
+	w.setupError = ""
+	w.setupLabel = label
+	run(func(err error) {
+		w.setupBusy = false
+		w.setupLabel = ""
+		if errors.Is(err, herdr.ErrSetupCanceled) {
+			return
+		}
+		if err != nil {
+			w.setupError = err.Error()
+			return
+		}
+		w.setupError = ""
+		if w.retry != nil {
+			w.retry()
+		}
 	})
 }

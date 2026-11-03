@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"fmt"
 	"slices"
 	"testing"
 
@@ -53,7 +54,7 @@ func TestHerdrMissingOffersInstallAndPlainTerminal(t *testing.T) {
 	w.SetExtraHooks(ExtraHooks{PlainTerminal: func() error { opened++; return nil }, StartupMode: func(m string) { mode = m }})
 	tester := native.NewTester(w.View, 1200, 800)
 	tester.Frame()
-	if !tester.HasText("Herdr is not installed") || !tester.HasText("Installation Guide") {
+	if !tester.HasText("Herdr is not installed") || !tester.HasText("Install Herdr") || !tester.HasText("Choose Herdr…") || !tester.HasText("Installation Guide") {
 		t.Fatal("missing install guidance")
 	}
 	if _, ok := tester.Find("Retry connection"); ok {
@@ -72,6 +73,71 @@ func TestHerdrMissingOffersInstallAndPlainTerminal(t *testing.T) {
 	tester.Frame()
 	if mode != "plain" {
 		t.Fatalf("startup mode %q", mode)
+	}
+}
+
+func TestHerdrMissingInstallsOrChooses(t *testing.T) {
+	a := app.New()
+	a.Update(session.PublishedSnapshot{State: session.Incompatible, Stale: true, Error: herdr.ErrNotInstalled.Error()})
+	retried := 0
+	w := New(a, func() { retried++ })
+	installed := 0
+	w.SetExtraHooks(ExtraHooks{
+		InstallHerdr: func(done func(error)) { installed++; done(nil) },
+		ChooseHerdr:  func(done func(error)) { done(herdr.ErrSetupCanceled) },
+	})
+	tester := native.NewTester(w.View, 1200, 800)
+	tester.Frame()
+	if err := tester.Click("Install Herdr"); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if installed != 1 || retried != 1 {
+		t.Fatalf("installed %d retried %d", installed, retried)
+	}
+	if err := tester.Click("Choose Herdr…"); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if retried != 1 || tester.HasText("setup canceled") {
+		t.Fatal("a canceled choice should not connect or show an error")
+	}
+	w.SetExtraHooks(ExtraHooks{ChooseHerdr: func(done func(error)) { done(fmt.Errorf("not a Herdr executable")) }})
+	tester.Frame()
+	if err := tester.Click("Choose Herdr…"); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if !tester.HasText("not a Herdr executable") || retried != 1 {
+		t.Fatal("choose error")
+	}
+}
+
+func TestHerdrMissingDisablesActionsWhileInstalling(t *testing.T) {
+	a := app.New()
+	a.Update(session.PublishedSnapshot{State: session.Incompatible, Stale: true, Error: herdr.ErrNotInstalled.Error()})
+	checked := 0
+	w := New(a, func() { checked++ })
+	installed := 0
+	w.SetExtraHooks(ExtraHooks{InstallHerdr: func(func(error)) { installed++ }})
+	tester := native.NewTester(w.View, 1200, 800)
+	tester.Frame()
+	if err := tester.Click("Install Herdr"); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if !tester.HasText("Installing Herdr…") {
+		t.Fatal("install progress")
+	}
+	if err := tester.Click("Install Herdr"); err != nil {
+		t.Fatal(err)
+	}
+	if err := tester.Click("Check Again"); err != nil {
+		t.Fatal(err)
+	}
+	tester.Frame()
+	if installed != 1 || checked != 0 {
+		t.Fatalf("installed %d checked %d", installed, checked)
 	}
 }
 

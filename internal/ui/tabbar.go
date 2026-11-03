@@ -59,12 +59,8 @@ func (w *Window) toolbar(c *native.Context, v app.View, p design.Palette) {
 			}
 		}
 		w.prefixChip(c, p)
-		if len(v.Tabs) > 0 {
-			label := "Changes"
-			if w.changes.open {
-				label = "Terminal"
-			}
-			if w.changesButton(c, "show-changes", label, "Toggle changes", false, p).Disabled(!w.Can("changes")).Clicked() {
+		if len(v.Tabs) > 0 && (w.workspaceRepo(v.WorkspaceID) || w.changes.open) {
+			if w.gitChangesButton(c, w.ActionLabel("changes"), w.changes.open, p).Disabled(!w.Can("changes")).Clicked() {
 				w.Dispatch("changes")
 			}
 		}

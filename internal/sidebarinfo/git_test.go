@@ -40,14 +40,14 @@ func TestCollectRealGitBranchDivergenceAndRemoteWithoutNetwork(t *testing.T) {
 	t.Setenv("GIT_CONFIG_KEY_0", "remote.origin.url")
 	t.Setenv("GIT_CONFIG_VALUE_0", "https://gitlab.com/wrong")
 	info := collectGit(context.Background(), path, runCommand)
-	if !info.GitKnown || info.Branch != "main" || info.Ahead != 1 || info.Behind != 1 || info.Remote != "github" {
+	if !info.GitKnown || info.RepoRoot == "" || info.Branch != "main" || info.Ahead != 1 || info.Behind != 1 || info.Remote != "github" {
 		t.Fatal(info)
 	}
 	gitTest(t, path, "checkout", "--detach", "HEAD")
-	if detached := collectGit(context.Background(), path, runCommand); detached.GitKnown || detached.Branch != "" {
-		t.Fatal("invented detached branch", detached)
+	if detached := collectGit(context.Background(), path, runCommand); detached.GitKnown || detached.Branch != "" || detached.RepoRoot == "" {
+		t.Fatal("detached repository lost its root or invented a branch", detached)
 	}
-	if missing := collectGit(context.Background(), t.TempDir(), runCommand); missing.GitKnown || missing.Branch != "" {
+	if missing := collectGit(context.Background(), t.TempDir(), runCommand); missing.GitKnown || missing.Branch != "" || missing.RepoRoot != "" {
 		t.Fatal("invented repository", missing)
 	}
 }
