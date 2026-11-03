@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Follow herdr-app's startup. Hergo does not bundle Herdr. When Herdr is missing, the window can install it with the official installer or use an executable you choose. When Herdr is installed and the default session is not listening, Hergo starts `herdr server` and leaves it running after the window closes. An explicit socket or named session is left untouched. `-plain` and the Plain terminal startup choice still open a plain terminal.
+- Replace the toolbar Changes label with a Git icon. Hide it, and the workspace menu item, when the workspace is not a Git repository. The Changes view lists the 100 most recent commits; choosing one shows that commit's changes against its first parent.
+
 ## 0.0.19
 
 - Fix a Windows named-pipe listener shutdown race that could hang session cleanup and block release tests. Upgrade go-winio to v0.6.4 and run its listener-close regression tests in Windows CI.

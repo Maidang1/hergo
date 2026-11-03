@@ -41,7 +41,8 @@ func candidateDirs(home, goos string) []string {
 		dirs = append(dirs, "/usr/local/bin", "/usr/bin", "/home/linuxbrew/.linuxbrew/bin")
 	case "windows":
 		if local := os.Getenv("LOCALAPPDATA"); local != "" {
-			dirs = append(dirs, filepath.Join(local, "Programs", "herdr"), filepath.Join(local, "herdr"))
+			// The official install.ps1 puts herdr.exe in Programs\Herdr\bin.
+			dirs = append(dirs, filepath.Join(local, "Programs", "Herdr", "bin"), filepath.Join(local, "Programs", "herdr"), filepath.Join(local, "herdr"))
 		}
 	}
 	return dirs

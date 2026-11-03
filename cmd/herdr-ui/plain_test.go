@@ -1,6 +1,10 @@
 package main
 
 import (
+	"context"
+	"os"
+	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/Maidang1/herdr-ui/internal/herdr"
@@ -17,7 +21,8 @@ func TestStartupPlain(t *testing.T) {
 		want         bool
 	}{
 		{"auto", false, false, installed, false},
-		{"auto", false, false, missing, true},
+		// A missing Herdr opens the setup window, which can install it.
+		{"auto", false, false, missing, false},
 		// A Herdr that does not answer still opens its window, which
 		// explains the failure and offers Retry.
 		{"auto", false, false, broken, false},
@@ -30,6 +35,23 @@ func TestStartupPlain(t *testing.T) {
 		if got := startupPlain(c.mode, c.plain, c.herdr, c.install); got != c.want {
 			t.Fatalf("%+v: %v", c, got)
 		}
+	}
+}
+
+func TestInstallationWatchUse(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("the stand-in executable is a shell script")
+	}
+	dir := t.TempDir()
+	bin := filepath.Join(dir, "herdr")
+	if err := os.WriteFile(bin, []byte("#!/bin/sh\necho herdr 0.9.5\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	w := newInstallationWatch("missing-herdr-name", herdr.Installation{})
+	w.Use(bin)
+	found := w.Refresh(context.Background())
+	if !found.Installed() || found.Version != "herdr 0.9.5" {
+		t.Fatal(found)
 	}
 }
 

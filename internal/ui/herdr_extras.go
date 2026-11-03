@@ -36,6 +36,12 @@ type ExtraHooks struct {
 	// "plain"); PlainTerminal opens the plain terminal now.
 	StartupMode   func(mode string)
 	PlainTerminal func() error
+	// InstallHerdr runs Herdr's official installer. ChooseHerdr asks for an
+	// existing executable. done runs on the UI thread; a nil error means
+	// Herdr is ready to connect. herdr.ErrSetupCanceled means the file
+	// dialog was closed without a choice.
+	InstallHerdr func(done func(error))
+	ChooseHerdr  func(done func(error))
 	// Installation is what Hergo found of the Herdr executable.
 	Installation func() herdr.Installation
 	// WindowTitle sets the native window's title.

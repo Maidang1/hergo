@@ -31,7 +31,7 @@ func (w *Window) workspaceMenu(m *native.Menu, row app.WorkspaceRow) {
 	w.menuAction(m, "Rename Workspace…", "rename_workspace", selectRow)
 	w.menuAction(m, "Move Up", "move_workspace_up", selectRow)
 	w.menuAction(m, "Move Down", "move_workspace_down", selectRow)
-	if row.Path != "" && w.hooks.Changes != nil && w.hooks.DiffFile != nil {
+	if row.RepoRoot != "" && w.hooks.Changes != nil && w.hooks.DiffFile != nil {
 		if m.Item("Show Changes").Chosen() {
 			selectRow()
 			w.syncChanges()

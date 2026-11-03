@@ -21,10 +21,11 @@ import (
 
 var isDarwin = runtime.GOOS == "darwin"
 
-// startupPlain decides whether Hergo opens as a plain terminal: always
-// when asked to, never when Herdr was asked for, and otherwise when Herdr
-// is not installed.
-func startupPlain(mode string, forcePlain, forceHerdr bool, install herdr.Installation) bool {
+// startupPlain decides whether Hergo opens as a plain terminal. That happens
+// when this launch asked for it, or when the saved startup choice is the
+// plain terminal. Automatic mode opens Herdr's window either way, so a
+// missing Herdr shows the setup screen instead of a shell.
+func startupPlain(mode string, forcePlain, forceHerdr bool, _ herdr.Installation) bool {
 	switch {
 	case forcePlain:
 		return true
@@ -32,10 +33,9 @@ func startupPlain(mode string, forcePlain, forceHerdr bool, install herdr.Instal
 		return false
 	case mode == "plain":
 		return true
-	case mode == "herdr":
+	default:
 		return false
 	}
-	return install.Path == ""
 }
 
 // installationWatch holds what was last found of Herdr, for any thread.
@@ -52,6 +52,14 @@ func newInstallationWatch(binary string, first herdr.Installation) *installation
 }
 
 func (w *installationWatch) Get() herdr.Installation { return *w.value.Load() }
+
+// Use points the next Refresh at path. path may be an executable or a
+// name looked up on PATH and in the usual install directories.
+func (w *installationWatch) Use(path string) {
+	w.mu.Lock()
+	w.binary = path
+	w.mu.Unlock()
+}
 
 // Refresh looks for Herdr again; it blocks, so callers run it off the UI
 // thread.
@@ -109,8 +117,8 @@ func openPlainWindow(cfg plainWindowConfig) *mygo.Window {
 		})
 	}
 	screen = plain.New(plain.Options{
-		Env:  os.Environ(),
-		Font: terminal.Font{Family: persisted.FontFamily, Size: persisted.FontSize, Weight: persisted.FontWeight, LineHeight: persisted.LineHeight},
+		Env:          os.Environ(),
+		Font:         terminal.Font{Family: persisted.FontFamily, Size: persisted.FontSize, Weight: persisted.FontWeight, LineHeight: persisted.LineHeight},
 		CopyOnSelect: copyOnSelect, MinimumContrast: persisted.MinimumContrast, OptionAsAlt: persisted.OptionAsAlt,
 		Cursor: cursorStyle(persisted.Cursor), NoBlink: !persisted.CursorBlink,
 		Post:         post,

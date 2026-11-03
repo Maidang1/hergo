@@ -34,6 +34,7 @@ type AgentRow struct {
 
 type WorkspaceRow struct {
 	Branch, Remote                        string
+	RepoRoot                              string
 	Ahead, Behind                         int
 	GitKnown, PortsKnown                  bool
 	Ports                                 []int
@@ -309,6 +310,7 @@ func (a *App) View() View {
 			info := details.Info
 			r.Branch = info.Branch
 			r.Remote = info.Remote
+			r.RepoRoot = info.RepoRoot
 			r.Ahead = info.Ahead
 			r.Behind = info.Behind
 			r.GitKnown = info.GitKnown

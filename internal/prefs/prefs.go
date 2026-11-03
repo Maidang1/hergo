@@ -44,9 +44,9 @@ type Settings struct {
 	CursorBlink bool
 	// Toast is how agent notifications reach the user.
 	Toast Toast
-	// StartupMode is how the app opens: "auto" connects to Herdr when it
-	// is installed and opens a plain terminal otherwise, "herdr" always
-	// connects, and "plain" always opens the plain terminal.
+	// StartupMode is how the app opens: "auto" and "herdr" open Herdr's
+	// window, offering to install Herdr when it is missing, and "plain"
+	// always opens the plain terminal.
 	StartupMode string
 	// AgentView is the sidebar's agent filter preset, shared with Herdr.
 	AgentView string
@@ -91,7 +91,7 @@ type Store struct {
 	values Settings
 	// layouts are tab layouts saved for layout.apply.
 	layouts []LayoutTemplate
-	extra  map[string]json.RawMessage
+	extra   map[string]json.RawMessage
 	// toastSet names the toast keys chosen here, which Herdr's
 	// configuration no longer overrides.
 	toastSet map[string]bool

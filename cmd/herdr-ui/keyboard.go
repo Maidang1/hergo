@@ -64,14 +64,14 @@ func (k *keyboardEndpoint) run(ctx context.Context, socket string, changed func(
 	}
 }
 
-func keyboardHooks(ctx context.Context, s *session.Session, k *keyboardEndpoint, screen *view.Window, post func(func()), closeWindow func(), binary string, target herdr.Target) view.ActionHooks {
-	_, env, _ := target.Attach(binary, "keyboard-overlay", os.Environ())
+func keyboardHooks(ctx context.Context, s *session.Session, k *keyboardEndpoint, screen *view.Window, post func(func()), closeWindow func(), binary func() string, target herdr.Target) view.ActionHooks {
+	_, env, _ := target.Attach(binary(), "keyboard-overlay", os.Environ())
 	return view.ActionHooks{
 		Detach: closeWindow,
 		// The settings window replaces this hook in state.go; the
 		// config editor below stays reachable as EditConfig from the
 		// Shortcuts page.
-		Settings:       func() error { return editHerdrConfigWith(binary, target, screen, env) },
+		Settings:       func() error { return editHerdrConfigWith(binary(), target, screen, env) },
 		WriteClipboard: func(text string) error { return mygo.Clipboard.Write(transfer.TextData(text)) },
 		RevealPath:     func(path string) { mygo.Shell.ShowItemInFolder(path) },
 		ReadImage:      func() []byte { return mygo.Clipboard.ReadImage() },
@@ -143,7 +143,7 @@ func keyboardHooks(ctx context.Context, s *session.Session, k *keyboardEndpoint,
 						return
 					}
 					if bindings.Commands[index].Type == "popup" || bindings.Commands[index].Type == "plugin_action" {
-						if err := screen.OpenCommandSurface("Herdr command", []string{binary}, env, ""); err != nil {
+						if err := screen.OpenCommandSurface("Herdr command", []string{binary()}, env, ""); err != nil {
 							done(err)
 							return
 						}

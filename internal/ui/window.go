@@ -52,6 +52,9 @@ type Window struct {
 	agentView           string
 	shareReminders      bool
 	startupMode         string
+	setupBusy           bool
+	setupError          string
+	setupLabel          string
 	title               string
 	manifests           manifestSettings
 	shape               design.Shape
