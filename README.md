@@ -1,55 +1,47 @@
 # Hergo
 
-[Herdr](https://github.com/herdrdev/herdr) 的原生桌面客户端，让工作区、Git 工作树、coding agent 和多窗格终端集中在一个窗口里。
+<p align="center">
+  <img src="assets/app/icon.png" alt="Hergo 应用图标" width="144" height="144">
+</p>
 
-Hergo 取名自 **Her**dr 与 my**go**。使用 Go 和 [mygo](https://github.com/egoist/mygo) 构建，支持 macOS、Windows x64 与 Linux amd64/arm64。界面与终端不依赖 WebView，运行时无需 Node.js。
+<p align="center">
+  Herdr 的原生桌面客户端，让工作区、Git 工作树、AI 编程助手和多窗格终端集中在一个窗口里。
+</p>
 
-[下载最新版本](https://github.com/Maidang1/hergo/releases/latest) · [更新记录](CHANGELOG.md) · [反馈问题](https://github.com/Maidang1/hergo/issues)
+<p align="center">
+  <a href="https://github.com/Maidang1/hergo/releases/latest">下载最新版本</a> ·
+  <a href="CHANGELOG.md">更新记录</a> ·
+  <a href="https://github.com/Maidang1/hergo/issues">反馈问题</a>
+</p>
 
-## 功能
+Hergo 取名自 **Her**dr 与 my**go**，使用 Go 和 [mygo](https://github.com/egoist/mygo) 构建。支持 macOS、Windows 和 Linux，界面与终端均为原生渲染，无需 WebView 或 Node.js 运行时。
 
-- **工作区与工作树**：浏览已有会话，查看分支、ahead/behind 和本地监听端口，通过菜单管理工作区与 worktree。
-- **多窗格终端**：切换标签、水平或垂直分屏、调整比例、方向导航，以及放大和恢复窗格。
-- **代码改动查看**：Git 仓库的工具栏显示 Git 图标，不是 Git 仓库时不显示。可查看相对 HEAD 的未提交改动，也可点历史提交查看该次改动；支持单栏、左右对照、语法高亮、搜索和手动刷新。
-- **Agent 状态与详情**：按工作区聚合 agent，查看检测诊断、进程与会话引用，独立命名 agent，配置通知、输出匹配提醒与 agent 集成。
-- **Herdr 管理入口**：设置内管理插件、会话恢复配置与保存的 SSH 机器；通过独立命令终端交互安装插件、连接远程或打开本地命名会话。
-- **键盘与鼠标入口**：保留 Herdr prefix 模式，提供命令面板、快捷键参考、右键菜单和双击重命名。
-- **终端体验**：文字选择与复制粘贴、查找、清屏、字体缩放、文件路径打开和 Zen 模式；具体能力因平台而异。
-- **Agent 交互**：在菜单或命令面板给 agent 发送 prompt、在 agent 停下（完成/等待/空闲）时提醒一次、在 pane 中启动 agent；侧栏按视图（全部 / 需要处理 / 工作中 / 当前工作区）筛选 agent，并与 Herdr 客户端共享。
-- **整理与布局**：拖拽侧栏工作区和标签重新排序；把 pane 移到新标签、新工作区或其他标签；保存标签布局并以新标签重新打开。
-- **纯净终端模式**：本地 shell 与标签。可从菜单打开，或在设置里选为下次启动方式。
-- **原生外观与更新**：System / Light / Dark 主题、持久化偏好，以及支持 Ed25519 校验的应用内更新。
+## 可以做什么
 
-### Herdr 检测与启动
-
-启动时 Hergo 在 PATH 与常见安装目录（`~/.local/bin`、`~/.cargo/bin`、Homebrew，以及 Windows 的 `%LOCALAPPDATA%\Programs\Herdr\bin`）中查找 `herdr`。从 Dock 或 Finder 打开时，也会补上登录 shell 的 PATH。
-
-- **已安装，默认会话已在监听**：直接连接，显示工作区、标签与 agent。
-- **已安装，默认会话没有在监听**：后台启动 `herdr server`，等到套接字可连接后再进入。已经在监听时不会再启动第二个。关闭窗口不停止这个服务。
-- **未安装**：打开安装页，可以安装官方 Herdr、选择本机已有的可执行文件、查看安装说明，或改用纯净终端。
-- 指定了 `-socket`、`HERDR_SOCKET_PATH` 或具名 `HERDR_SESSION` 时，只连接该会话，不启动服务。
-
-**Settings → Herdr → Startup** 选择 Automatic（默认）、Herdr 或 Plain terminal。Automatic 与 Herdr 都打开 Herdr 窗口；未安装时停在安装页。Plain terminal 以及命令行 `-plain` 本次以纯净终端打开，`-connect` 本次强制打开 Herdr 窗口。纯净终端快捷键：macOS 为 `Cmd+T` / `Cmd+W` / `Cmd+Shift+[ ]` / `Cmd+1…9`，其他平台为 `Ctrl+Shift+` 同名键，`Ctrl+Tab` 切换标签；单独的 Ctrl 组合键始终交给 shell。Herdr 模式下也可从 **Hergo → New Plain Terminal Window** 打开纯净终端窗口。
-
-Hergo 不携带 Herdr 可执行文件。它使用本机安装的 Herdr，并在默认会话未运行时启动它。普通浏览保持窗口本地选择；需要改变会话的操作按 Herdr 语义执行。关闭窗口只释放本应用的连接，不关闭 Herdr 会话，也不停止 Herdr 服务，也不接管已有终端 owner。
-
-通过 **Pane → Agent and Process Details** 查看所选终端详情；**Pane → Notify When Output Matches** 设置一次输出提醒。提醒匹配最近 80 行，已有匹配会立即触发；Details 内可选 Rust 正则与 1–1440 分钟超时，默认 30 分钟。提醒可取消，连接或终端身份变化时结束，不自动重复。
-
-**Settings → Session restore** 修改 Herdr 的 `config.toml`，保留其他配置与注释，仅在下次 Herdr 启动时生效。保存终端历史可能包含令牌或密码。**Settings → Machines** 的远程入口使用 Herdr 交互式客户端，不会把远程工作区投射进原生侧栏；远程连接和 Windows 命令终端尚未实机验证。
+- **管理工作区**：浏览 [Herdr](https://github.com/herdrdev/herdr) 会话、工作区与 Git 工作树，查看分支、领先与落后提交数和本地监听端口。
+- **使用多窗格终端**：新建与切换标签，水平或垂直分屏，调整比例、方向聚焦、放大窗格，并保存和恢复标签布局。
+- **查看代码改动**：浏览未提交改动和最近 100 条提交，使用单栏或左右对照 diff、语法高亮、搜索及手动刷新。
+- **跟进 AI 编程助手**：按工作区查看 agent 状态与详情，发送 prompt、启动 agent，以及设置停止提醒或输出匹配提醒。
+- **整理会话**：拖拽排序工作区与标签，将窗格移到其他标签或工作区，筛选全部、需要处理或工作中的 agent。
+- **调整终端外观**：设置字体、光标与键盘行为，跟随 Herdr 配色，或选择 Hergo 及 Monokai Pro 亮暗主题。
+- **使用本地终端**：通过纯净终端模式打开本地 shell 与标签，也可以将它设为默认启动方式。
+- **管理 Herdr**：安装或选择 Herdr，管理插件、会话恢复配置与 SSH 机器，并检查应用更新。
 
 ## 安装
 
-从 [GitHub Releases](https://github.com/Maidang1/hergo/releases) 安装 Hergo 后即可打开。尚未安装 [Herdr](https://github.com/herdrdev/herdr) 时，窗口里的 **Install Herdr** 会运行官方安装脚本（Unix 为 [install.sh](https://herdr.dev/install.sh)，Windows 为 [install.ps1](https://herdr.dev/install.ps1)）。也可以选择本机已有的 `herdr`。Windows 和 Linux 的 CI 集成测试使用 Herdr 0.9.5；API 接入以实际运行的 Herdr 版本为准。
+从 [GitHub Releases](https://github.com/Maidang1/hergo/releases/latest) 下载对应平台的安装包。建议使用同一 release 提供的 SHA-256 文件校验下载内容。
 
-| 平台 | 安装包 | 说明 |
+| 平台 | 安装包 | 环境 |
 | --- | --- | --- |
-| macOS | 通用 `.dmg` | 同时包含 Apple Silicon 和 Intel 架构 |
-| Windows x64 | `-setup.exe` 或便携 `.zip` | 原生命名管道与 endpoint 终端单元格渲染 |
+| macOS | 通用 `.dmg` | 同时支持 Apple Silicon 与 Intel |
+| Windows x64 | `-setup.exe` 或便携 `.zip` | 原生 Windows 桌面 |
 | Linux amd64 / arm64 | `.deb` 或便携 `.tar.gz` + `install.sh` | Ubuntu 22.04+ 为验证基线，需要 glibc、GTK 3 和图形会话 |
 
 ### macOS
 
-打开 DMG，将 **Hergo.app** 拖入 Applications 后启动。当前应用采用 ad hoc 签名，未经 Apple 公证；首次启动被 Gatekeeper 阻止时，确认安装包来源后执行：
+打开 DMG，将 **Hergo.app** 拖入 Applications。
+
+当前应用使用 ad hoc 签名，未经 Apple 公证。首次启动被 Gatekeeper 阻止时，确认安装包来源后执行：
 
 ```sh
 xattr -dr com.apple.quarantine "/Applications/Hergo.app"
@@ -57,31 +49,56 @@ xattr -dr com.apple.quarantine "/Applications/Hergo.app"
 
 ### Windows
 
-运行安装器，或将便携 ZIP 完整解压后启动应用。请保留解压目录中的资源文件。
+运行安装器，或完整解压便携 ZIP 后启动应用。请保留解压目录中的资源文件。
 
-Windows 使用原生 endpoint 渲染，不启动 `herdr terminal attach`。快捷键使用 Ctrl+Shift 等组合，避免占用常用终端按键。安装、构建和已知限制见 [Windows 支持说明](docs/windows-support.md)。
+安装、原生终端支持与构建说明见 [Windows 支持文档](docs/windows-support.md)。
 
 ### Linux
 
-下载与 CPU 架构匹配的安装包：`amd64` 对应 x86_64，`arm64` 对应 aarch64。
+`amd64` 对应 x86_64，`arm64` 对应 aarch64。
 
-- **Debian / Ubuntu**：使用 `sudo apt install ./hergo_<version>_<arch>.deb` 安装，再运行 `hergo`。
-- **用户级安装**：从同一 release 下载 `install.sh` 与对应便携归档，以普通用户执行 `sh install.sh ./hergo-<version>-linux-<arch>.tar.gz`。
-- **便携运行**：完整解压归档后运行其中的 `./hergo`，保留终端动态库与其他资源。
+- **Debian / Ubuntu**：执行 `sudo apt install ./hergo_<version>_<arch>.deb`，安装后运行 `hergo`。
+- **用户级安装**：下载同一 release 的 `install.sh` 和便携归档，以普通用户执行 `sh install.sh ./hergo-<version>-linux-<arch>.tar.gz`。
+- **便携运行**：完整解压归档，运行其中的 `./hergo`，并保留所有资源和动态库。
 
-用户级安装需要 `~/.local/bin` 位于 PATH，并支持可写安装目录中的应用内更新。系统级 `.deb` 安装请使用新版 `.deb` 更新，不要以 root 运行 GUI。
+用户级安装需要将 `~/.local/bin` 加入 PATH，支持应用内更新。系统级 `.deb` 安装请使用新版 `.deb` 更新，不要以 root 运行 GUI。
 
-安装前建议使用同一 release 的 SHA-256 文件校验下载。GTK 依赖、完整安装命令和验证范围见 [Linux 支持说明](docs/linux-support.md)。
+GTK 依赖、完整命令和平台限制见 [Linux 支持文档](docs/linux-support.md)。
 
-## 使用
+## 第一次启动
 
-启动后选择工作区与标签，即可连接当前标签的可见终端。默认 prefix 是 `Ctrl+B`，再按动作键；`?` 打开快捷键参考。自定义配置和平台差异见 [快捷键说明](docs/keyboard-parity.md)。
+Hergo 使用本机安装的 Herdr，不捆绑 Herdr 可执行文件。启动时会在 PATH 和常见安装目录中查找 `herdr`；从 macOS Dock 或 Finder 打开时，也会补上登录 shell 的 PATH。
+
+| 本机状态 | 启动行为 |
+| --- | --- |
+| Herdr 已安装，默认会话正在运行 | 直接连接，显示工作区与终端 |
+| Herdr 已安装，默认会话尚未运行 | 启动 `herdr server`，等待连接后进入 |
+| Herdr 未安装 | 显示安装页，可安装官方版本、选择已有可执行文件或打开纯净终端 |
+
+**Install Herdr** 使用官方安装脚本：[Unix](https://herdr.dev/install.sh) / [Windows](https://herdr.dev/install.ps1)。Windows 和 Linux 的 CI 集成测试使用 Herdr 0.9.5，实际可用 API 取决于本机运行的 Herdr 版本。
+
+在 **Settings → Herdr → Startup** 中选择默认启动方式：
+
+- **Automatic / Herdr**：进入 Herdr 工作区；未安装时显示安装页。
+- **Plain terminal**：打开本地 shell，不连接 Herdr。
+
+命令行 `-plain` 或 `-connect` 可覆盖本次启动方式。指定 `-socket`、`HERDR_SOCKET_PATH` 或具名 `HERDR_SESSION` 时，只连接指定会话，不启动服务。
+
+关闭 Hergo 不会停止 Herdr 服务或关闭会话。终端已有 owner 时，应用提供诊断信息和 Retry，不会自动接管。
+
+## 日常使用
+
+### 工作区与终端
+
+选择工作区和标签，即可查看标签中的可见终端。使用菜单、右键菜单或命令面板管理标签、分屏和布局。
+
+Herdr 默认 prefix 为 `Ctrl+B`，再按动作键；prefix 后按 `?` 查看快捷键参考。自定义绑定与平台差异见 [快捷键说明](docs/keyboard-parity.md)。
 
 常用 macOS 快捷键：
 
 | 操作 | 快捷键 |
 | --- | --- |
-| 命令与会话导航面板 | `Cmd+P` |
+| 命令与会话导航 | `Cmd+P` |
 | 新建 / 关闭标签 | `Cmd+T` / `Cmd+W` |
 | 垂直 / 水平分屏 | `Cmd+D` / `Cmd+Shift+D` |
 | 查找终端文字 | `Cmd+F` |
@@ -92,21 +109,29 @@ Windows 使用原生 endpoint 渲染，不启动 `herdr terminal attach`。快�
 | 行首 / 行尾 / 删到行首 | `Cmd+←` / `Cmd+→` / `Cmd+⌫` |
 | 按词左移 / 右移 | `Option+←` / `Option+→` |
 
-终端已有 owner 时，应用保留诊断信息并提供 Retry，不自动 takeover。关闭窗口只释放本应用的连接，不关闭 Herdr 会话。
+纯净终端还支持 `Cmd+Shift+[ / ]` 和 `Cmd+1…9` 切换标签；其他平台使用对应的 `Ctrl+Shift` 组合键，并支持 `Ctrl+Tab`。单独的 Ctrl 组合键交给 shell。
 
 ### 查看代码改动
 
-在 Git 仓库中，工作区工具栏右侧是 Git 图标。不是 Git 仓库时不显示。点击图标，或选择 **View → Show Changes**。左侧上方是未提交改动和最近 100 条提交，点一条提交查看它相对第一个父提交的改动；左侧下方是文件列表。右侧按文件连续展示只读 diff，直接滚动即可查看所有改动。**Unified / Split** 切换单栏与左右对照，**Refresh** 重新读取磁盘上的最新改动。已暂存和未暂存改动合并显示，未跟踪文件按新增内容预览，忽略的文件不列入。
+在 Git 工作区点击工具栏的 Git 图标，或选择 **View → Show Changes**。不是 Git 仓库时隐藏该入口。
 
-在 diff 中使用查找快捷键搜索当前文件。再次点击 Git 图标、按 Esc 或关闭按钮可返回终端；终端会话继续运行。显示状态、选中的提交、文件和对照方式按工作区记忆：切到其他工作区时显示该工作区自己的视图，切回来恢复原来的位置并重新读取改动。文件按可见范围加载；二进制或非 UTF-8 文件显示提示；超过 1 MiB 的文件在可用时显示有界 patch。只读，不提供暂存、撤销或写回文件。
+左侧显示未提交改动、最近 100 条提交与文件列表，右侧连续展示文件 diff。选择历史提交可查看它相对第一个父提交的改动；**Unified / Split** 切换单栏与左右对照，**Refresh** 重新读取改动。
+
+已暂存和未暂存改动合并显示，未跟踪文件按新增内容预览。视图状态按工作区保留，关闭 Changes 后终端会话继续运行。该视图只读；二进制、非 UTF-8 或大文件会显示提示或有界 patch。
+
+### Agent 与提醒
+
+在侧栏查看 agent 状态，通过 **Pane → Agent and Process Details** 查看详情，通过 **Pane → Notify When Output Matches** 设置一次输出提醒。
+
+输出提醒检查最近 80 行，已有匹配会立即触发；Details 中可选 Rust 正则及 1–1440 分钟超时，默认 30 分钟。提醒可取消，连接或终端身份变化时结束，不自动重复。
 
 ### 配色
 
-Hergo 默认自动跟随 Herdr 的 `config.toml` 配色，无需在设置中选择。启动时读取配置，运行期间每秒检测一次文件内容变化，自动同步窗口与终端的默认背景、文字和选区。已有偏好文件没有 `color_scheme` 时也使用此默认行为；明确保存的配色选择继续保留。
+默认跟随 Herdr 的 `config.toml`，自动同步窗口和终端的默认背景、文字与选区。修改配置后会自动应用；暂时无法读取或解析时保留当前配色。
 
-如需单独设置 Hergo，在 **Settings → Appearance** 关闭 **Follow Herdr** 开关，再在下方 **Theme** 中直接选择 System、Hergo Light、Hergo Dark、Herdr 内置主题或本地新增的 **Monokai Pro**（`monokai-pro`）和 **Monokai Pro Light**（`monokai-pro-light`）。这两个主题分别固定使用上游的暗色和亮色配色。System 根据系统外观切换 Hergo Light 与 Hergo Dark。重新打开开关即可恢复自动跟随；手动主题在跟随期间不可修改。
+要单独设置 Hergo，在 **Settings → Appearance** 关闭 **Follow Herdr**，再选择 System、Hergo Light、Hergo Dark、Herdr 内置主题、Monokai Pro 或 Monokai Pro Light。
 
-跟随配置时支持 `[theme]` 的 `name`、`auto_switch`、`dark_name`、`light_name`，以及 `[theme.custom]` 和亮暗覆盖。例如：
+跟随 Herdr 时支持亮暗自动切换及自定义覆盖，例如：
 
 ```toml
 [theme]
@@ -116,89 +141,99 @@ dark_name = "gruvbox"
 light_name = "gruvbox-light"
 ```
 
-跟随配置时，`name = "monokai-pro"`（或 `"monokai-pro-light"`）配合 `auto_switch = true`，Hergo 会按系统外观在这两个本地配色之间切换；Herdr 本身是否支持这些名称取决于其版本。
+跟随配置中的 `monokai-pro` 或 `monokai-pro-light` 配合 `auto_switch = true` 时，Hergo 会按系统外观切换这两个本地主题。Herdr 本身是否支持这些名称取决于其版本。配色来源与授权见 [主题说明](internal/design/herdr-ATTRIBUTION.md)。
 
-Hergo Light 和 Hergo Dark 分别固定使用 Hergo 自带的浅色与深色；其他固定名称的主题保持自身的亮暗风格。修改 Herdr 配置后自动应用；配置暂时无法读取或解析时保留当前配色，下次修改后重试。Herdr 内置色值来自固定版本的 Herdr 源码，本地主题随 Hergo 一同提供。Monokai Pro 的亮暗色值、选区混色和终端 16 色 ANSI 调色板直接取自 `loctvl842/monokai-pro.nvim` 的 `pro.lua`、`light.lua` 和主题映射；其他主题的 ANSI 调色板继续由终端插件提供。
+### 更新与偏好
 
-### 自动更新
+正式打包且安装位置可写的应用在启动 10 秒后检查更新，此后每天检查一次。也可使用 **Check for Updates** 菜单，或在 **Settings → Updates** 中设置自动检查与安装。下载的更新经过 Ed25519 签名校验。
 
-正式打包且安装位置可写的应用在启动 10 秒后检查更新，运行期间每天再检查一次。可从 **Check for Updates** 菜单手动检查，在设置的 Updates 页控制自动检查与自动下载安装。
+偏好保存在系统配置目录下的 `hergo/prefs.json`。新文件不存在时会读取旧版偏好，后续修改写入新路径。当前应用标识为 `dev.hergo`，启动命令为 `hergo`；跨名称更新仍需各平台实机验证。`v0.0.6` 及更早版本需要手动安装一次新版才能使用应用内更新。
 
-下载的更新经过 Ed25519 签名校验。开发构建和不可写的安装位置不会后台检查；`v0.0.6` 及更早版本需要手动安装一次新版才能使用应用内更新。
+## 从源码开发
 
-## 开发
-
-需要 `go.mod` 指定的 Go 版本（当前为 1.27.1）、Python 3.10+，以及运行原生窗口所需的平台环境。本机已安装 Herdr 且没有用 `-socket` 指定会话时，Hergo 会在默认服务未运行时启动它。集成测试传入 `-socket`，因此不会启动用户自己的服务。
+需要 `go.mod` 指定的 Go 版本、Python 3.10+，以及当前平台的原生窗口环境。普通构建无需 npm。
 
 ```sh
 git clone https://github.com/Maidang1/hergo.git
 cd hergo
 make test
-make build
 make run
 ```
 
-请使用 `make` 或 `scripts/go.sh`，不要直接用普通 `go build` 替代。包装脚本为固定版本的 mygo 生成带有必要终端补丁的工作区，不修改 Go module cache，也不依赖开发者本机的 `replace` 路径。
+请使用 `make` 或 `scripts/go.sh`。包装脚本会为固定版本的 mygo 生成带必要终端补丁的工作区，不修改 Go module cache。Windows 使用 `python scripts/go.py`，详见平台文档。
 
 | 命令 | 用途 |
 | --- | --- |
 | `make test` | Python 发布契约测试、Go 测试和 vet |
-| `make build` | 构建当前平台可执行文件，输出到 `bin/` |
+| `make build` | 构建 `bin/hergo` 和协议探针 |
 | `make run` | 构建并打开 Hergo |
-| `make probe` | 只读检查 Herdr、配置与布局，不占用终端 |
-| `make window` | 本地 `/bin/cat` 输入测试窗口，不连接 Herdr |
-| `make integration` | 临时隔离服务、真实终端插件与原生窗口验证 |
-| `make package` | 打包 macOS `.app` |
+| `make probe` | 只读检查 Herdr、配置与布局 |
+| `make window` | 打开本地 `/bin/cat` 测试窗口，不连接 Herdr |
+| `make integration` | 使用隔离服务验证终端插件与原生窗口 |
+| `make package` | 打包当前架构的 macOS `.app` |
 | `make dmg` | 打包 macOS 通用 `.app` 与 `.dmg` |
 | `make linux` | 打包 Linux 双架构 `.deb`、便携归档与安装脚本 |
 
-Windows 使用 `python scripts/go.py` 包装器；具体命令见平台文档。开发期首次启动终端可能下载经过校验的原生库，正式包已包含动态库，不在启动时下载。集成测试使用独立临时服务，不关闭已有用户会话；Linux 和 Windows 的测试环境要求见各自平台文档。
+macOS 测试若遇到 Unix socket 路径过长，可使用 `TMPDIR=/tmp make test`。
 
-指定 Herdr 可执行文件或 socket：
+指定 Herdr 可执行文件或会话：
 
 ```sh
 ./bin/hergo -herdr /path/to/herdr
 ./bin/hergo -socket /path/to/herdr.sock
+./bin/hergo -plain
 ```
 
-### 图标
+默认启动可能启动本机 Herdr 服务。集成测试传入显式 socket，使用独立临时服务，不关闭用户已有会话。开发期首次启动终端可能下载经过校验的原生库，正式安装包已包含动态库。
 
-普通构建不需要 npm。重新生成嵌入图标时执行：
+### 图标资源
+
+应用图标将 Herdr 的公羊、卷角与终端提示符，以及 mygo 的五色感叹号组合成小羊造型。源文件为 [icon.svg](assets/app/icon.svg)，README 与安装包使用 [icon.png](assets/app/icon.png)。设计来源见 [图标说明](assets/app/ICON-NOTICE.md)。
+
+修改应用图标后生成 PNG：
+
+```sh
+resvg -w 1024 -h 1024 assets/app/icon.svg assets/app/icon.png
+```
+
+重新生成界面使用的嵌入图标：
 
 ```sh
 npm ci
 npm run icons
 ```
 
-来源清单位于 `scripts/icons.json` 和 `internal/icons/SOURCES.txt`。应用图标将 Herdr 的公羊、卷角与终端提示符，以及 mygo 的五色感叹号融合成圆润的小羊造型，设计来源见 [应用图标说明](assets/app/ICON-NOTICE.md)。源文件为 `assets/app/icon.svg`；修改后可用 `resvg -w 1024 -h 1024 assets/app/icon.svg assets/app/icon.png` 更新打包用 PNG。
+图标来源清单位于 `scripts/icons.json` 与 `internal/icons/SOURCES.txt`。
 
 ## 发布
 
-1. 更新 `mygo.json` 的 `version`。
-2. 在 `CHANGELOG.md` 添加同版本的更新说明，运行 `make test` 并提交。
+1. 更新 `mygo.json` 的 `version`，在 `CHANGELOG.md` 添加对应说明。
+2. 运行 `make test` 并提交。
 3. 推送与版本一致的 `vX.Y.Z` 标签。
 
-[Release 工作流](.github/workflows/release.yml)并行测试和打包 macOS、Windows 与 Linux 双架构，所有平台成功后统一创建 GitHub Release。手动触发只生成工作流产物，不发布 release。
+[Release 工作流](.github/workflows/release.yml)会并行测试和打包 macOS、Windows 与 Linux 双架构，所有平台成功后统一创建 GitHub Release。手动触发只生成工作流产物，不发布 release。
 
-仓库 Actions secret `MYGO_UPDATER_PRIVATE_KEY` 提供更新签名私钥，配置文件只保存公钥。缺少密钥或签名更新产物会停止发布。macOS 同时提供通用与兼容旧客户端的架构专用更新清单；私钥不得提交到仓库。
+应用更新签名使用 Actions secret `MYGO_UPDATER_PRIVATE_KEY`，仓库配置仅保存公钥。缺少密钥或签名产物会停止发布。
 
-## 文档与验证范围
+## 文档与已知限制
 
-- [设计与实现](docs/implementation.md)：架构、接口、事件同步与设计决策。
-- [功能对齐](docs/feature-parity-plan.md)与[快捷键说明](docs/keyboard-parity.md)：功能范围和平台差异。
-- [Windows 支持](docs/windows-support.md)与[Linux 支持](docs/linux-support.md)：安装、构建、测试与已知限制。
-- [API schema](reference/herdr-api-schema.json)：机器可读接口参考。
-- [侧栏验证](docs/sidebar-validation.md)及 [M0](docs/m0-validation.md)、[M1](docs/m1-validation.md)、[M2](docs/m2-validation.md)、[M3](docs/m3-validation.md)、[M4](docs/m4-validation.md)：阶段验收记录。
-- [设计稿](docs.pen/new.pen)：使用 Pencil 打开；`docs.pen/01.pen` 为历史素材。
+- [设计与实现](docs/implementation.md)、[功能对齐](docs/feature-parity-plan.md)、[快捷键说明](docs/keyboard-parity.md)。
+- [Windows 支持](docs/windows-support.md)、[Linux 支持](docs/linux-support.md)、[API schema](reference/herdr-api-schema.json)。
+- [侧栏验证](docs/sidebar-validation.md)及 [M0](docs/m0-validation.md)、[M1](docs/m1-validation.md)、[M2](docs/m2-validation.md)、[M3](docs/m3-validation.md)、[M4](docs/m4-validation.md) 验收记录。
+- [Pencil 设计稿](docs.pen/new.pen)；`docs.pen/01.pen` 为历史素材。
 
-CI 测试不能替代实机桌面验收。Windows IME、AltGr、DPI 与完整交互，Linux X11/Wayland 与 IME，以及 macOS 的系统 IME、真实鼠标与 VoiceOver 等仍需实机验证。Windows 的 endpoint 查找覆盖已发布屏幕，且不渲染内联图像；具体限制以平台文档为准。
+Windows IME、AltGr、DPI，Linux X11/Wayland 与 IME，以及 macOS 系统 IME、真实鼠标和 VoiceOver 等仍需实机验收。Windows 终端通过原生 endpoint 渲染，不支持内联图像。
 
-## 许可证
+SSH 机器入口使用 Herdr 交互式客户端，不会将远程工作区投射进原生侧栏；远程连接与 Windows 命令终端尚未实机验证。会话恢复设置会修改 Herdr 的 `config.toml`，仅在下次启动 Herdr 时生效；开启终端历史保存时，请留意其中可能包含的敏感内容。
 
-项目代码采用 [MIT License](LICENSE)。第三方依赖、图标及品牌标识保留各自的许可证和权利声明，不因本项目采用 MIT 而改变：
+## 许可证与致谢
 
-- [设计图标授权](assets/icons/NOTICE.md)
+项目代码采用 [MIT License](LICENSE)。感谢 [Herdr](https://github.com/herdrdev/herdr)、[mygo](https://github.com/egoist/mygo) 及相关开源项目。
+
+第三方代码、图标和品牌标识保留各自的许可证与权利声明：
+
+- [Herdr 配色与 Monokai Pro 主题来源](internal/design/herdr-ATTRIBUTION.md)
+- [Monokai Pro MIT 许可证](internal/design/monokai-pro-LICENSE)
+- [应用图标说明](assets/app/ICON-NOTICE.md)与[设计图标授权](assets/icons/NOTICE.md)
 - [Lucide 图标许可证](internal/icons/LICENSE-lucide)
 - [Lobe 图标许可证](internal/icons/LICENSE-lobe)
-
-名称迁移说明：应用标识为 `dev.hergo`，源码入口为 `cmd/hergo`，各平台启动命令为 `hergo`。偏好保存到系统配置目录下的 `hergo/prefs.json`；新路径不存在时读取旧版偏好，后续修改写入新路径。GitHub 仓库与更新源为 `Maidang1/hergo`，更新公钥保持不变。Linux 新安装位于 `~/.local/hergo.app`（用户级）或 `/opt/hergo`（系统级）。应用标识变更及跨名称更新仍需各平台实机验证。
