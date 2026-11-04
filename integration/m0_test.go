@@ -14,15 +14,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/layout"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/layout"
 	"github.com/egoist/mygo/plugins/terminal"
 )
 
 func TestDirectAttach(t *testing.T) {
 	binary := unixTestBinary(t)
 	// Short paths avoid macOS's Unix-domain socket path length limit.
-	dir, err := os.MkdirTemp("/tmp", "herdr-ui-m0-")
+	dir, err := os.MkdirTemp("/tmp", "hergo-m0-")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -150,7 +150,7 @@ func TestDirectAttach(t *testing.T) {
 	}
 	t.Log("literal Ctrl-B/q crossed the attach escape layer without detach")
 	t.Log("stream, single owner, 103x31 resize, close and reattach passed")
-	if windowBinary := os.Getenv("HERDR_UI_M0_WINDOW_BINARY"); windowBinary != "" {
+	if windowBinary := os.Getenv("HERGO_M0_WINDOW_BINARY"); windowBinary != "" {
 		if err := third.Close(); err != nil {
 			t.Fatal(err)
 		}

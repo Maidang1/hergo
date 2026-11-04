@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/session"
 )
 
 // Notice is one notification Herdr sent to this client, as the in-app toast

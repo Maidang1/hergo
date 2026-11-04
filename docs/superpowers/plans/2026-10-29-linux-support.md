@@ -9,7 +9,7 @@
 ## Tasks
 
 - [x] Add release-contract tests for Linux packaging configuration, matrix and publication gate; verify failure before configuration changes.
-- [x] Configure `mygo.json` with Linux native-only packaging and `herdr-ui` command. Add `make linux` for both CPU targets.
+- [x] Configure `mygo.json` with Linux native-only packaging and `hergo` command. Add `make linux` for both CPU targets.
 - [x] Add a checksum-pinned Linux Herdr downloader with bounded downloads, atomic publication and no destination overwrite; test with local fixture responses, including failure cases.
 - [x] Enable the existing isolated Unix integration suite on Linux. Require an explicit Linux test executable; keep macOS discovery unchanged. Exercise real PTY attach ownership, resizing, reconnect, event snapshots, layout and window lifecycle under Xvfb.
 - [x] Add native Ubuntu matrix jobs: test, vet, build, isolated integration, Debian/portable packaging, bundled terminal-library checks and signed update artifacts. Publish only after macOS, Windows and both Linux jobs pass. Preserve original update archive names/URLs and publish one identical `install.sh`.
@@ -20,8 +20,8 @@
 
 - `python3 -m unittest discover -s scripts -p 'test_*.py' -v`
 - `make test`
-- `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 ./scripts/go.sh build -o /tmp/herdr-ui-linux-amd64 ./cmd/herdr-ui`
-- `CGO_ENABLED=0 GOOS=linux GOARCH=arm64 ./scripts/go.sh build -o /tmp/herdr-ui-linux-arm64 ./cmd/herdr-ui`
+- `CGO_ENABLED=0 GOOS=linux GOARCH=amd64 ./scripts/go.sh build -o /tmp/hergo-linux-amd64 ./cmd/hergo`
+- `CGO_ENABLED=0 GOOS=linux GOARCH=arm64 ./scripts/go.sh build -o /tmp/hergo-linux-arm64 ./cmd/hergo`
 - Compile tagged integration tests for both architectures without executing them.
 - `make linux`: inspect `.deb` control dependencies, archive resources and installer script; unsigned local packages do not validate production signing.
 

@@ -7,16 +7,16 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/herdr"
 	"github.com/egoist/mygo/plugins/terminal"
 	native "github.com/egoist/mygo/ui"
 )
 
 func TestRenderSettingsArtifacts(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR to export settings renders")
+		t.Skip("set HERGO_RENDER_DIR to export settings renders")
 	}
 	for _, dark := range []bool{false, true} {
 		w := referenceWindow(t)

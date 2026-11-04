@@ -20384,9 +20384,9 @@
                         {
                           "type": "text",
                           "id": "kI8Eq",
-                          "name": "TS Out /Users/bytedance/codes/open-source/herdr-ui     4f2a1c9 [master]",
+                          "name": "TS Out /Users/bytedance/codes/open-source/hergo     4f2a1c9 [master]",
                           "fill": "$text-secondary",
-                          "content": "/Users/bytedance/codes/open-source/herdr-ui     4f2a1c9 [master]",
+                          "content": "/Users/bytedance/codes/open-source/hergo     4f2a1c9 [master]",
                           "fontFamily": "$font-mono",
                           "fontSize": 13,
                           "fontWeight": "normal"
@@ -44513,9 +44513,9 @@
                             {
                               "type": "text",
                               "id": "lEY6z",
-                              "name": "Link herdrui.dev",
+                              "name": "Link hergo",
                               "fill": "$accent-text",
-                              "content": "herdrui.dev",
+                              "content": "hergo",
                               "fontFamily": "$font-ui",
                               "fontSize": 12,
                               "fontWeight": "normal"
@@ -50163,7 +50163,7 @@
                                 {
                                   "type": "frame",
                                   "id": "cwr1z",
-                                  "name": "SP Tag Herdr UI",
+                                  "name": "SP Tag Hergo",
                                   "height": 16,
                                   "fill": "$chip",
                                   "cornerRadius": 4,
@@ -50176,9 +50176,9 @@
                                     {
                                       "type": "text",
                                       "id": "T7fOO",
-                                      "name": "SP Tag Text Herdr UI",
+                                      "name": "SP Tag Text Hergo",
                                       "fill": "$text-secondary",
-                                      "content": "Herdr UI",
+                                      "content": "Hergo",
                                       "fontFamily": "$font-ui",
                                       "fontSize": 10,
                                       "fontWeight": "500"
@@ -50262,7 +50262,7 @@
                         {
                           "type": "frame",
                           "id": "X4vH0N",
-                          "name": "SP Tag Herdr UI · SN",
+                          "name": "SP Tag Hergo · SN",
                           "height": 16,
                           "fill": "$chip",
                           "cornerRadius": 4,
@@ -50275,9 +50275,9 @@
                             {
                               "type": "text",
                               "id": "lOwy1",
-                              "name": "SP Tag Text Herdr UI · SN",
+                              "name": "SP Tag Text Hergo · SN",
                               "fill": "$text-secondary",
-                              "content": "Herdr UI",
+                              "content": "Hergo",
                               "fontFamily": "$font-ui",
                               "fontSize": 10,
                               "fontWeight": "500"
@@ -50771,7 +50771,7 @@
                                 {
                                   "type": "frame",
                                   "id": "T5RPLT",
-                                  "name": "SP Tag Herdr UI · SN · SN",
+                                  "name": "SP Tag Hergo · SN · SN",
                                   "height": 16,
                                   "fill": "$chip",
                                   "cornerRadius": 4,
@@ -50784,9 +50784,9 @@
                                     {
                                       "type": "text",
                                       "id": "NJNiC",
-                                      "name": "SP Tag Text Herdr UI · SN · SN",
+                                      "name": "SP Tag Text Hergo · SN · SN",
                                       "fill": "$text-secondary",
-                                      "content": "Herdr UI",
+                                      "content": "Hergo",
                                       "fontFamily": "$font-ui",
                                       "fontSize": 10,
                                       "fontWeight": "500"
@@ -79379,9 +79379,9 @@
                         {
                           "type": "text",
                           "id": "mAT6z",
-                          "name": "Transient States Dark TS Out /Users/bytedance/codes/open-source/herdr-ui     4f2a1c9 [master]",
+                          "name": "Transient States Dark TS Out /Users/bytedance/codes/open-source/hergo     4f2a1c9 [master]",
                           "fill": "$dark-text-secondary",
-                          "content": "/Users/bytedance/codes/open-source/herdr-ui     4f2a1c9 [master]",
+                          "content": "/Users/bytedance/codes/open-source/hergo     4f2a1c9 [master]",
                           "fontFamily": "$font-mono",
                           "fontSize": 13,
                           "fontWeight": "normal"
@@ -106924,9 +106924,9 @@
                             {
                               "type": "text",
                               "id": "iBo5l",
-                              "name": "About Dark Link herdrui.dev",
+                              "name": "About Dark Link hergo",
                               "fill": "$dark-accent-text",
-                              "content": "herdrui.dev",
+                              "content": "hergo",
                               "fontFamily": "$font-ui",
                               "fontSize": 12,
                               "fontWeight": "normal"
@@ -109158,7 +109158,7 @@
                                 {
                                   "type": "frame",
                                   "id": "JIz4E",
-                                  "name": "Settings · Notifications Dark SP Tag Herdr UI",
+                                  "name": "Settings · Notifications Dark SP Tag Hergo",
                                   "height": 16,
                                   "fill": "$dark-chip",
                                   "cornerRadius": 4,
@@ -109171,9 +109171,9 @@
                                     {
                                       "type": "text",
                                       "id": "DT3hc",
-                                      "name": "Settings · Notifications Dark SP Tag Text Herdr UI",
+                                      "name": "Settings · Notifications Dark SP Tag Text Hergo",
                                       "fill": "$dark-text-secondary",
-                                      "content": "Herdr UI",
+                                      "content": "Hergo",
                                       "fontFamily": "$font-ui",
                                       "fontSize": 10,
                                       "fontWeight": "500"
@@ -109257,7 +109257,7 @@
                         {
                           "type": "frame",
                           "id": "QhqIY",
-                          "name": "Settings · Notifications Dark SP Tag Herdr UI · SN",
+                          "name": "Settings · Notifications Dark SP Tag Hergo · SN",
                           "height": 16,
                           "fill": "$dark-chip",
                           "cornerRadius": 4,
@@ -109270,9 +109270,9 @@
                             {
                               "type": "text",
                               "id": "sjco8",
-                              "name": "Settings · Notifications Dark SP Tag Text Herdr UI · SN",
+                              "name": "Settings · Notifications Dark SP Tag Text Hergo · SN",
                               "fill": "$dark-text-secondary",
-                              "content": "Herdr UI",
+                              "content": "Hergo",
                               "fontFamily": "$font-ui",
                               "fontSize": 10,
                               "fontWeight": "500"
@@ -109766,7 +109766,7 @@
                                 {
                                   "type": "frame",
                                   "id": "zdY4s",
-                                  "name": "Settings · Notifications Dark SP Tag Herdr UI · SN · SN",
+                                  "name": "Settings · Notifications Dark SP Tag Hergo · SN · SN",
                                   "height": 16,
                                   "fill": "$dark-chip",
                                   "cornerRadius": 4,
@@ -109779,9 +109779,9 @@
                                     {
                                       "type": "text",
                                       "id": "UibhG",
-                                      "name": "Settings · Notifications Dark SP Tag Text Herdr UI · SN · SN",
+                                      "name": "Settings · Notifications Dark SP Tag Text Hergo · SN · SN",
                                       "fill": "$dark-text-secondary",
-                                      "content": "Herdr UI",
+                                      "content": "Hergo",
                                       "fontFamily": "$font-ui",
                                       "fontSize": 10,
                                       "fontWeight": "500"

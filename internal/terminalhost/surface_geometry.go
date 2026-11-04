@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Maidang1/herdr-ui/internal/layout"
-	"github.com/Maidang1/herdr-ui/internal/surfaceview"
+	"github.com/Maidang1/hergo/internal/layout"
+	"github.com/Maidang1/hergo/internal/surfaceview"
 )
 
 // ConfigureSurface preserves the whole-canvas sizing contract for callers

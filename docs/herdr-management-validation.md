@@ -6,7 +6,7 @@ Validation on macOS with Herdr 0.9.5:
 
 - `make test`: 12 Python tests, all Go packages and `go vet` passed after final fixes.
 - `make build`: application and probe built after final fixes.
-- Targeted race checks: `./scripts/go.sh test -race ./internal/herdr ./internal/ui ./internal/app ./cmd/herdr-ui`.
+- Targeted race checks: `./scripts/go.sh test -race ./internal/herdr ./internal/ui ./internal/app ./cmd/hergo`.
 - Existing isolated integration suite passed, including native-window lifecycle; these tests use temporary config/socket paths.
 - Temporary overlay tests against a disposable real daemon passed for shell process details, empty plugin catalog, substring/regex output matching and cancellation without blocking ping.
 - Eight light/dark renders of Details, Plugins, Session restore and Machines were generated. Settings were also inspected at the supported 560×420 minimum; new control rows stack at narrow widths.

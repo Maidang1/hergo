@@ -12,9 +12,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/endpoint"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/localipc"
+	"github.com/Maidang1/hergo/internal/endpoint"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/localipc"
 	"github.com/Microsoft/go-winio"
 )
 

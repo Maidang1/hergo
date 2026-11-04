@@ -6,12 +6,12 @@ import (
 	"log"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/icons"
-	"github.com/Maidang1/herdr-ui/internal/layout"
-	"github.com/Maidang1/herdr-ui/internal/session"
-	"github.com/Maidang1/herdr-ui/internal/terminalhost"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/icons"
+	"github.com/Maidang1/hergo/internal/layout"
+	"github.com/Maidang1/hergo/internal/session"
+	"github.com/Maidang1/hergo/internal/terminalhost"
 	native "github.com/egoist/mygo/ui"
 )
 

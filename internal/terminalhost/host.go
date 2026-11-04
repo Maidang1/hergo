@@ -9,8 +9,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/input"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/input"
 	"github.com/egoist/mygo"
 	"github.com/egoist/mygo/plugins/terminal"
 	"github.com/egoist/mygo/transfer"

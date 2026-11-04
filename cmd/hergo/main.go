@@ -14,9 +14,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/prefs"
-	"github.com/Maidang1/herdr-ui/internal/shellenv"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/prefs"
+	"github.com/Maidang1/hergo/internal/shellenv"
 	"github.com/egoist/mygo"
 	"github.com/egoist/mygo/plugins/terminal"
 	updatenative "github.com/egoist/mygo/plugins/updater/native"

@@ -115,7 +115,7 @@ jobs:
       - name: Build native executable
         run: |
           New-Item -ItemType Directory -Force artifacts | Out-Null
-          python scripts/go.py build -trimpath -o artifacts/herdr-ui.exe ./cmd/herdr-ui
+          python scripts/go.py build -trimpath -o artifacts/hergo.exe ./cmd/hergo
       - name: Install checksum-pinned official Herdr runtime
         run: python scripts/install-herdr-windows.py --destination "$env:RUNNER_TEMP/herdr-0.9.5"
       - name: Real named-pipe daemon and semantic surface integration
@@ -137,7 +137,7 @@ jobs:
       - name: Create portable application ZIP
         run: |
           $version = '${{ steps.version.outputs.version }}'
-          $portable = Join-Path $env:RUNNER_TEMP 'herdr-ui-portable'
+          $portable = Join-Path $env:RUNNER_TEMP 'hergo-portable'
           New-Item -ItemType Directory -Force $portable | Out-Null
           Get-ChildItem dist/windows-amd64 | Where-Object { $_.Name -notmatch ' Setup |\.tar\.gz$|\.delta$|^update-' } | Copy-Item -Destination $portable -Recurse
           Compress-Archive -Path "$portable/*" -DestinationPath "artifacts/Hergo-$version-windows-amd64.zip"
@@ -214,7 +214,7 @@ jobs:
             openbox >"$RUNNER_TEMP/openbox.log" 2>&1 &
             wm=$!
             trap "kill $wm 2>/dev/null || true" EXIT
-            export HERDR_UI_M0_WINDOW_BINARY="$PWD/bin/herdr-ui"
+            export HERGO_M0_WINDOW_BINARY="$PWD/bin/hergo"
             ./scripts/go.sh test -tags integration -count=1 -v -timeout 5m ./integration
           '
       - name: Package native Linux application and signed updates

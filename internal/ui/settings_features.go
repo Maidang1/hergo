@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/session"
 	native "github.com/egoist/mygo/ui"
 )
 

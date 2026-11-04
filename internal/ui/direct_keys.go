@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
+	"github.com/Maidang1/hergo/internal/app"
 )
 
 // DirectKeys are native application shortcuts. Terminal control keys remain

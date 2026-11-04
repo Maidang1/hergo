@@ -13,7 +13,7 @@ import (
 
 func TestAgentMarksKeepBrandColor(t *testing.T) {
 	dir := t.TempDir()
-	if extra := os.Getenv("HERDR_UI_RENDER_DIR"); extra != "" {
+	if extra := os.Getenv("HERGO_RENDER_DIR"); extra != "" {
 		dir = extra
 		if err := os.MkdirAll(dir, 0o755); err != nil {
 			t.Fatal(err)

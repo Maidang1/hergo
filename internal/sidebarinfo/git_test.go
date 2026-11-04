@@ -77,12 +77,12 @@ func testExecutable(t *testing.T) string {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Setenv("HERDR_UI_TEST_SLEEP_HELPER", "1")
+	t.Setenv("HERGO_TEST_SLEEP_HELPER", "1")
 	return path
 }
 
 func TestCommandCancellationHelper(t *testing.T) {
-	if os.Getenv("HERDR_UI_TEST_SLEEP_HELPER") != "1" {
+	if os.Getenv("HERGO_TEST_SLEEP_HELPER") != "1" {
 		return
 	}
 	time.Sleep(10 * time.Second)

@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/input"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/input"
+	"github.com/Maidang1/hergo/internal/session"
 	native "github.com/egoist/mygo/ui"
 )
 

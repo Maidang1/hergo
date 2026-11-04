@@ -144,7 +144,7 @@ def prepare_locked():
     theme_patch = ROOT / "scripts/mygo-theme-colors.go.txt"
     scroll_test = ROOT / "scripts/mygo-scroll-zoom_test.go.txt"
     stamp = {"version": version, "patch_sha256": hashlib.sha256(Path(__file__).read_bytes() + theme_patch.read_bytes() + scroll_test.read_bytes()).hexdigest()}
-    stamp_path = dest / ".herdr-ui-patch.json"
+    stamp_path = dest / ".hergo-patch.json"
     work = build / "go.work"
     go_version = re.search(r"^go\s+(\S+)", (ROOT / "go.mod").read_text(encoding="utf-8"), re.M).group(1)
     workspace = f"go {go_version}\n\nuse (\n\t..\n\t./mygo\n)\n"
@@ -196,7 +196,7 @@ def prepare_locked():
         scroll_test_source.write_bytes(scroll_test.read_bytes())
         patched = [terminal, view, paint, theme_source, scroll_test_source] + patch_option_as_alt(staged)
         subprocess.run(["gofmt", "-w", *map(str, patched)], check=True, env=env)
-        (staged / ".herdr-ui-patch.json").write_text(json.dumps(stamp, sort_keys=True) + "\n", encoding="utf-8")
+        (staged / ".hergo-patch.json").write_text(json.dumps(stamp, sort_keys=True) + "\n", encoding="utf-8")
         if dest.exists():
             shutil.rmtree(dest)
         staged.rename(dest)

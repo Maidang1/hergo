@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/session"
 	native "github.com/egoist/mygo/ui"
 )
 
@@ -30,7 +30,7 @@ func TestWindowReadsRealStateAndLocalSelection(t *testing.T) {
 	if _, ok := tt.Find("Terminal layout"); ok {
 		t.Fatal("removed header layout toolbar remains visible")
 	}
-	if dir := os.Getenv("HERDR_UI_RENDER_DIR"); dir != "" {
+	if dir := os.Getenv("HERGO_RENDER_DIR"); dir != "" {
 		if err := os.MkdirAll(dir, 0755); err != nil {
 			t.Fatal(err)
 		}

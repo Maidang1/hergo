@@ -6,7 +6,7 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
-	"github.com/Maidang1/herdr-ui/internal/localipc"
+	"github.com/Maidang1/hergo/internal/localipc"
 	"io"
 	"net"
 	"os"

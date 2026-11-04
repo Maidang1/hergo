@@ -36,7 +36,7 @@ Validation commands:
 ./scripts/go.sh test -race ./...
 ./scripts/go.sh vet ./...
 make build
-HERDR_UI_M0_WINDOW_BINARY="$PWD/bin/herdr-ui" ./scripts/go.sh test -tags integration ./integration -v -count=1
+HERGO_M0_WINDOW_BINARY="$PWD/bin/hergo" ./scripts/go.sh test -tags integration ./integration -v -count=1
 ```
 
 Integration tests create isolated sockets, configuration, repositories and worktrees under `/tmp`; they do not connect to existing user sessions.

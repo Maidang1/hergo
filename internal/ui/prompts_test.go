@@ -3,12 +3,12 @@ package ui
 import (
 	"testing"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
+	"github.com/Maidang1/hergo/internal/app"
 	native "github.com/egoist/mygo/ui"
 )
 
 func TestPromptsNameWhatTheyActOn(t *testing.T) {
-	v := app.View{WorkspaceName: "herdr-ui", TabID: "t", Tabs: []app.TabRow{{ID: "t", Name: "Dev"}}, Panes: []app.PaneRow{{ID: "a"}, {ID: "b"}}}
+	v := app.View{WorkspaceName: "hergo", TabID: "t", Tabs: []app.TabRow{{ID: "t", Name: "Dev"}}, Panes: []app.PaneRow{{ID: "a"}, {ID: "b"}}}
 	closeTab := promptFor("close_tab", v)
 	if closeTab.title != "Close tab “Dev”?" || closeTab.message != "Its 2 panes close, and the programs running in them end." || closeTab.action != "Close Tab" || !closeTab.destructive || !closeTab.confirm {
 		t.Fatalf("close tab = %+v", closeTab)
@@ -25,7 +25,7 @@ func TestRequiredPromptWaitsForText(t *testing.T) {
 	w := referenceWindow(t)
 	tester := native.NewTester(w.View, 820, 560)
 	var got []string
-	prompt := promptFor("new_worktree", app.View{WorkspaceName: "herdr-ui"})
+	prompt := promptFor("new_worktree", app.View{WorkspaceName: "hergo"})
 	prompt.focus, prompt.submit = true, func(text string) { got = append(got, text) }
 	w.controller.shortcut.prompt = &prompt
 	tester.Frame()

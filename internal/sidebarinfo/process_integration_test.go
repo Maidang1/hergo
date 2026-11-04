@@ -15,11 +15,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/hergo/internal/herdr"
 )
 
 func TestSidebarListenerHelper(t *testing.T) {
-	if os.Getenv("HERDR_UI_SIDEBAR_LISTENER_HELPER") != "1" {
+	if os.Getenv("HERGO_SIDEBAR_LISTENER_HELPER") != "1" {
 		return
 	}
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
@@ -45,7 +45,7 @@ func TestRealLocalTCPListenerIsScopedToPaneShellOwner(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, executable, "-test.run=^TestSidebarListenerHelper$")
-	cmd.Env = append(os.Environ(), "HERDR_UI_SIDEBAR_LISTENER_HELPER=1")
+	cmd.Env = append(os.Environ(), "HERGO_SIDEBAR_LISTENER_HELPER=1")
 	output, err := cmd.StdoutPipe()
 	if err != nil {
 		t.Fatal(err)

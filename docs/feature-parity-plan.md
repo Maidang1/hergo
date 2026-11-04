@@ -14,7 +14,7 @@
 | Prefix 和弦键位标签（Ctrl + B 小标签） | Herdr prefix 提示 | 已上线 |
 | 主题 System/Light/Dark（原生菜单） | 两者共有 | 已上线；本批次补持久化 |
 | 终端字号 ⌘=/⌘-/⌘0（8–48pt 夹取、热更新、持久化） | Herdr `window/commands.rs:455`；Kero `app.go:786` | 本批次 |
-| 外观偏好持久化（~/Library/Application Support/herdr-ui/prefs.json） | Kero 设置持久化 | 本批次 |
+| 外观偏好持久化（~/Library/Application Support/hergo/prefs.json） | Kero 设置持久化 | 本批次 |
 | ⌘J 跳到需要你的 agent | Kero `session.attention` | 本批次 |
 | ⌘B 切换侧栏（直键） | 两者共有 | 本批次 |
 | Agent 通知 + Dock 徽章（blocked/done，点击跳转，激活清空） | Kero `app.go:319-388`；herdr-gpui `notifications.rs`/`app_badge.rs` | 本批次 |

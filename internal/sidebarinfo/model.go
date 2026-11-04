@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/session"
 )
 
 type PaneSource struct{ ID, TerminalID string }

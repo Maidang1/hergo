@@ -10,8 +10,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/input"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/input"
 	"github.com/egoist/mygo/plugins/terminal"
 	native "github.com/egoist/mygo/ui"
 )

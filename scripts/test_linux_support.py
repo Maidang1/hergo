@@ -10,7 +10,7 @@ class LinuxReleaseTests(unittest.TestCase):
     def test_native_only_package(self):
         linux = json.loads((ROOT / 'mygo.json').read_text()).get('linux', {})
         self.assertIs(linux.get('webview'), False)
-        self.assertEqual(linux.get('command'), 'herdr-ui')
+        self.assertEqual(linux.get('command'), 'hergo')
         self.assertIn('Development', linux.get('categories', []))
 
     def test_both_native_architectures_gate_publication(self):

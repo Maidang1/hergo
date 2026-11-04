@@ -5,10 +5,10 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/gitdiff"
-	"github.com/Maidang1/herdr-ui/internal/icons"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/gitdiff"
+	"github.com/Maidang1/hergo/internal/icons"
+	"github.com/Maidang1/hergo/internal/session"
 	native "github.com/egoist/mygo/ui"
 	"github.com/egoist/mygo/ui/editor"
 )

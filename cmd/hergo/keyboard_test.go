@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/Maidang1/herdr-ui/internal/endpoint"
-	"github.com/Maidang1/herdr-ui/internal/input"
+	"github.com/Maidang1/hergo/internal/endpoint"
+	"github.com/Maidang1/hergo/internal/input"
 	"testing"
 )
 

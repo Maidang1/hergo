@@ -3,7 +3,7 @@ package session
 import (
 	"context"
 	"fmt"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/hergo/internal/herdr"
 	"strings"
 	"sync"
 	"testing"

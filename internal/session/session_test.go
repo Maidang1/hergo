@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/Maidang1/herdr-ui/internal/localipc"
+	"github.com/Maidang1/hergo/internal/localipc"
 	"net"
 	"os"
 	"path/filepath"
@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/hergo/internal/herdr"
 )
 
 const emptySnapshot = `{"type":"session_snapshot","snapshot":{"version":"test","protocol":22,"workspaces":[],"tabs":[],"panes":[],"layouts":[],"agents":[]}}`

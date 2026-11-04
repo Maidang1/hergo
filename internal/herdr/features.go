@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/localipc"
+	"github.com/Maidang1/hergo/internal/localipc"
 )
 
 // AgentDetails follows protocol 22's AgentInfo, independently of pane labels.

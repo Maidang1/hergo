@@ -11,7 +11,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/localipc"
+	"github.com/Maidang1/hergo/internal/localipc"
 )
 
 type ProtocolError struct{ Reason string }

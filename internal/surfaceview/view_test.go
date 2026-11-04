@@ -1,7 +1,7 @@
 package surfaceview
 
 import (
-	"github.com/Maidang1/herdr-ui/internal/endpoint"
+	"github.com/Maidang1/hergo/internal/endpoint"
 	"github.com/egoist/mygo/plugins/terminal"
 	"github.com/egoist/mygo/ui"
 	"testing"

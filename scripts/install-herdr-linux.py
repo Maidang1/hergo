@@ -32,7 +32,7 @@ def install(destination: Path, arch: str) -> Path:
         binary = stage / 'herdr'
         digest = hashlib.sha256()
         received = 0
-        request = urllib.request.Request(url, headers={'User-Agent': 'herdr-ui-linux-ci'})
+        request = urllib.request.Request(url, headers={'User-Agent': 'hergo-linux-ci'})
         with urllib.request.urlopen(request, timeout=60) as response, binary.open('xb') as output:
             while chunk := response.read(1024 * 1024):
                 received += len(chunk)

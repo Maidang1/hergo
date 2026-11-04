@@ -7,7 +7,7 @@ import (
 )
 
 // WindowCornerRadius is the corner radius of a window with a toolbar, as
-// herdr-ui's inset title bar has: macOS 26 rounds such windows far more
+// hergo's inset title bar has: macOS 26 rounds such windows far more
 // than earlier releases did.
 func WindowCornerRadius() float32 {
 	version, err := syscall.Sysctl("kern.osproductversion")

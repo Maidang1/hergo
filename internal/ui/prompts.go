@@ -3,7 +3,7 @@ package ui
 import (
 	"fmt"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
+	"github.com/Maidang1/hergo/internal/app"
 )
 
 // A prompt names what it acts on and says what follows, as a Mac alert

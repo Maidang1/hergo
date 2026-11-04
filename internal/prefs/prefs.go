@@ -1,4 +1,4 @@
-// Package prefs persists herdr-ui's own window settings — the appearance
+// Package prefs persists hergo's own window settings — the appearance
 // choice and the terminal's font, cursor and keyboard — apart from Herdr's keybinding config,
 // which stays in Herdr's own file.
 package prefs
@@ -11,7 +11,7 @@ import (
 	"sync"
 )
 
-// Settings is everything herdr-ui remembers between launches. Unknown
+// Settings is everything hergo remembers between launches. Unknown
 // fields in a newer file are kept on load so a downgrade does not erase
 // them.
 type Settings struct {
@@ -105,23 +105,29 @@ func pathFor(explicit string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(base, "herdr-ui", "prefs.json"), nil
+	return filepath.Join(base, "hergo", "prefs.json"), nil
 }
 
-// Open loads the settings at path, or the default location when empty. A
-// missing file is not an error: the defaults come back ready to save.
+// Open loads the settings at path, or the default location when empty.
+// When the default file is missing, legacy settings are read but subsequent
+// updates go to the new location. Missing files return defaults ready to save.
 func Open(path string) (*Store, error) {
 	resolved, err := pathFor(path)
 	if err != nil {
 		return nil, err
 	}
 	s := &Store{path: resolved, values: Defaults(), toastSet: map[string]bool{}}
-	data, err := os.ReadFile(resolved)
+	readPath := resolved
+	data, err := os.ReadFile(readPath)
+	if path == "" && os.IsNotExist(err) {
+		readPath = filepath.Join(filepath.Dir(filepath.Dir(resolved)), "herdr-ui", "prefs.json")
+		data, err = os.ReadFile(readPath)
+	}
 	if os.IsNotExist(err) {
 		return s, nil
 	}
 	if err != nil {
-		return nil, fmt.Errorf("prefs %s: %w", resolved, err)
+		return nil, fmt.Errorf("prefs %s: %w", readPath, err)
 	}
 	var raw map[string]json.RawMessage
 	if err := json.Unmarshal(data, &raw); err != nil {

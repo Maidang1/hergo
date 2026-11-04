@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	view "github.com/Maidang1/herdr-ui/internal/ui"
+	view "github.com/Maidang1/hergo/internal/ui"
 )
 
 const (

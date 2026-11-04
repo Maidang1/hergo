@@ -1,10 +1,68 @@
 package prefs
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"testing"
 )
+
+func TestDefaultPathMigratesLegacySettings(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("HOME", dir)
+	t.Setenv("APPDATA", dir)
+	t.Setenv("XDG_CONFIG_HOME", dir)
+	base, err := os.UserConfigDir()
+	if err != nil {
+		t.Fatal(err)
+	}
+	legacy := filepath.Join(base, "herdr-ui", "prefs.json")
+	current := filepath.Join(base, "hergo", "prefs.json")
+	if err := os.MkdirAll(filepath.Dir(legacy), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	original := `{"font_size":17,"future":{"enabled":true}}`
+	if err := os.WriteFile(legacy, []byte(original), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	s, err := Open("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if s.path != current || s.Settings().FontSize != 17 {
+		t.Fatalf("legacy settings not loaded into new path: %q, %+v", s.path, s.Settings())
+	}
+	if _, err := os.Stat(current); !os.IsNotExist(err) {
+		t.Fatalf("opening settings wrote the new file: %v", err)
+	}
+	if _, err := s.Update(func(v *Settings) { v.FontSize = 19 }); err != nil {
+		t.Fatal(err)
+	}
+	data, err := os.ReadFile(current)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var saved map[string]json.RawMessage
+	if err := json.Unmarshal(data, &saved); err != nil {
+		t.Fatal(err)
+	}
+	var future map[string]bool
+	if err := json.Unmarshal(saved["future"], &future); err != nil || !future["enabled"] {
+		t.Fatalf("unknown legacy fields lost: %s", data)
+	}
+	old, err := os.ReadFile(legacy)
+	if err != nil || string(old) != original {
+		t.Fatalf("legacy file changed: %q, %v", old, err)
+	}
+	again, err := Open("")
+	if err != nil || again.Settings().FontSize != 19 {
+		t.Fatalf("new settings did not take precedence: %v, %v", again, err)
+	}
+	explicit, err := Open(filepath.Join(dir, "explicit.json"))
+	if err != nil || explicit.Settings() != Defaults() {
+		t.Fatalf("explicit path inherited legacy settings: %v, %v", explicit, err)
+	}
+}
 
 func TestOpenMissingFileReturnsDefaults(t *testing.T) {
 	s, err := Open(filepath.Join(t.TempDir(), "nested", "prefs.json"))

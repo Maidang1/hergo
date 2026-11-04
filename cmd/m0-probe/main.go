@@ -13,9 +13,9 @@ import (
 	"path/filepath"
 	"runtime"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/input"
-	"github.com/Maidang1/herdr-ui/internal/layout"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/input"
+	"github.com/Maidang1/hergo/internal/layout"
 )
 
 func main() {

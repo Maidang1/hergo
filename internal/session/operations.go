@@ -9,8 +9,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/layout"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/layout"
 )
 
 type OperationKind uint8

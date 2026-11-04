@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/session"
 )
 
 // ExtraHooks reach the Herdr requests that act on agents, layouts and the

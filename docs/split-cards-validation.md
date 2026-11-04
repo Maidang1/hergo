@@ -14,4 +14,4 @@ Divider保留8px命中区和原布尔路径/结构指纹验证，视觉线只在
 
 卡片按钮补充：右分屏、下分屏、放大/恢复、关闭，窄卡片收为同样四项的操作菜单。按钮直接使用所在卡片身份；不以当前聚焦pane替代。测试覆盖身份替换/旧epoch拒绝、单pane放大后的恢复入口、关闭去重、远端拒绝、不确定响应不重放、权威快照确认，以及隔离服务中逐次关闭分屏和最后一个pane。关闭会结束远端终端，应用退出仍只detach。
 
-按钮改动最终验证（2026-10-24）：`./scripts/go.sh test -race ./...`、`./scripts/go.sh vet ./...`、`make integration`（五组隔离服务测试）、`make package`、`codesign --verify --deep --strict 'dist/darwin-arm64/Herdr UI.app'`及`git diff --check`均通过。重新生成并检查浅色卡片布局图，按钮与代理徽标无重叠。只读复核通过；真实系统鼠标、VoiceOver和IME仍需桌面交互验收，headless渲染不能替代这些验证。
+按钮改动最终验证（2026-10-24）：`./scripts/go.sh test -race ./...`、`./scripts/go.sh vet ./...`、`make integration`（五组隔离服务测试）、`make package`、`codesign --verify --deep --strict 'dist/darwin-arm64/Hergo.app'`及`git diff --check`均通过。重新生成并检查浅色卡片布局图，按钮与代理徽标无重叠。只读复核通过；真实系统鼠标、VoiceOver和IME仍需桌面交互验收，headless渲染不能替代这些验证。

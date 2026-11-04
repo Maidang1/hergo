@@ -9,12 +9,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/gitdiff"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/prefs"
-	"github.com/Maidang1/herdr-ui/internal/session"
-	view "github.com/Maidang1/herdr-ui/internal/ui"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/gitdiff"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/prefs"
+	"github.com/Maidang1/hergo/internal/session"
+	view "github.com/Maidang1/hergo/internal/ui"
 )
 
 func featureIdentity(s *session.Session, op session.Operation) bool {

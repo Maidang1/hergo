@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/gitdiff"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/input"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/gitdiff"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/input"
+	"github.com/Maidang1/hergo/internal/session"
 	"github.com/egoist/mygo/plugins/terminal"
 )
 

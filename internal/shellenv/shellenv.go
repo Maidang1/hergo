@@ -19,7 +19,7 @@ import (
 
 // marker precedes the PATH in the shell's output, which an interactive
 // shell's startup files may fill with other text.
-const marker = "__HERDR_UI_PATH__"
+const marker = "__HERGO_PATH__"
 
 // FromTerminal reports whether the process was started from a terminal,
 // whose PATH is already the shell's. launchd sets no TERM.

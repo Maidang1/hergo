@@ -26,7 +26,7 @@ def install(destination: Path) -> Path:
         archive = Path(tmp) / "runtime.zip"
         digest = hashlib.sha256()
         received = 0
-        request = urllib.request.Request(URL, headers={"User-Agent": "herdr-ui-windows-ci"})
+        request = urllib.request.Request(URL, headers={"User-Agent": "hergo-windows-ci"})
         with urllib.request.urlopen(request, timeout=60) as response, archive.open("wb") as output:
             while chunk := response.read(1024 * 1024):
                 received += len(chunk)

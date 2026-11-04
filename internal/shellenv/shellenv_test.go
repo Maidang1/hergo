@@ -83,7 +83,7 @@ func TestWindowsApplyPreservesPathWithoutUnixShell(t *testing.T) {
 	t.Setenv("PATH", `C:\Tools;C:\Windows\System32`)
 	t.Setenv("SHELL", `C:\missing-shell.exe`)
 	before := os.Getenv("PATH")
-	if err := Apply(context.Background(), "missing-herdr-ui-test-binary"); err != nil {
+	if err := Apply(context.Background(), "missing-hergo-test-binary"); err != nil {
 		t.Fatal(err)
 	}
 	if got := os.Getenv("PATH"); got != before {

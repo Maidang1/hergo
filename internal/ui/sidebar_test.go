@@ -3,10 +3,10 @@ package ui
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/session"
-	"github.com/Maidang1/herdr-ui/internal/sidebarinfo"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/session"
+	"github.com/Maidang1/hergo/internal/sidebarinfo"
 	native "github.com/egoist/mygo/ui"
 	"image/png"
 	"os"
@@ -141,9 +141,9 @@ func TestSidebarMenuOpensWindowCommands(t *testing.T) {
 }
 
 func TestSidebarRenderArtifacts(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR to export sidebar renders")
+		t.Skip("set HERGO_RENDER_DIR to export sidebar renders")
 	}
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		t.Fatal(err)
@@ -168,8 +168,8 @@ func TestSidebarRenderArtifacts(t *testing.T) {
 // An opt-in local render for comparing real read-only snapshot/metadata files.
 // It creates no terminal host and makes no service calls.
 func TestSidebarLiveRenderArtifact(t *testing.T) {
-	snapshotFile, metadataFile := os.Getenv("HERDR_UI_SIDEBAR_SNAPSHOT"), os.Getenv("HERDR_UI_SIDEBAR_METADATA")
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	snapshotFile, metadataFile := os.Getenv("HERGO_SIDEBAR_SNAPSHOT"), os.Getenv("HERGO_SIDEBAR_METADATA")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if snapshotFile == "" || metadataFile == "" || dir == "" {
 		t.Skip("set local snapshot, metadata and render paths")
 	}

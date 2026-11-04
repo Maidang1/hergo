@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/Maidang1/herdr-ui/internal/session"
-	"github.com/Maidang1/herdr-ui/internal/sidebarinfo"
+	"github.com/Maidang1/hergo/internal/session"
+	"github.com/Maidang1/hergo/internal/sidebarinfo"
 	"testing"
 )
 

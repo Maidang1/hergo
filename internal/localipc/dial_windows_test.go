@@ -12,7 +12,7 @@ import (
 )
 
 func TestNamedPipeRoundTripAndDeadline(t *testing.T) {
-	path := fmt.Sprintf("herdr-ui-test-%d-%d.sock", os.Getpid(), time.Now().UnixNano())
+	path := fmt.Sprintf("hergo-test-%d-%d.sock", os.Getpid(), time.Now().UnixNano())
 	listener, err := Listen(path)
 	if err != nil {
 		t.Fatal(err)
@@ -62,7 +62,7 @@ func TestNamedPipeRoundTripAndDeadline(t *testing.T) {
 func TestNamedPipeDialCancellation(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
-	_, err := DialContext(ctx, fmt.Sprintf("herdr-ui-missing-%d.sock", os.Getpid()))
+	_, err := DialContext(ctx, fmt.Sprintf("hergo-missing-%d.sock", os.Getpid()))
 	if !errors.Is(err, context.Canceled) {
 		t.Fatalf("canceled pipe dial = %v", err)
 	}

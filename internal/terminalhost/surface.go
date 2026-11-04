@@ -10,8 +10,8 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/Maidang1/herdr-ui/internal/endpoint"
-	"github.com/Maidang1/herdr-ui/internal/surfaceview"
+	"github.com/Maidang1/hergo/internal/endpoint"
+	"github.com/Maidang1/hergo/internal/surfaceview"
 	"github.com/egoist/mygo"
 	"github.com/egoist/mygo/plugins/terminal"
 	"github.com/egoist/mygo/transfer"

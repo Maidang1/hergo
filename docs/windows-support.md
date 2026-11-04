@@ -2,7 +2,7 @@
 
 The Windows frontend keeps the existing mygo interface and renders the real Herdr daemon's native endpoint surface. It sends semantic key, Unicode text, paste, mouse and resize events to that endpoint. It does not start a terminal attach process or feed rendered screen characters back into a shell.
 
-The implementation targets Windows x64 and Herdr 0.9.5. The Windows job in the [Release workflow](https://github.com/Maidang1/herdr-ui/actions/workflows/release.yml) runs on `windows-2025`. Native tests, vet, executable compilation, the real-daemon integration test, installer packaging and portable ZIP creation first passed together in [run 40747889447](https://github.com/Maidang1/herdr-ui/actions/runs/40747889447). This validates the automated Windows transport and terminal path; physical desktop UI and IME checks remain listed below.
+The implementation targets Windows x64 and Herdr 0.9.5. The Windows job in the [Release workflow](https://github.com/Maidang1/hergo/actions/workflows/release.yml) runs on `windows-2025`. Native tests, vet, executable compilation, the real-daemon integration test, installer packaging and portable ZIP creation first passed together in [run 40747889447](https://github.com/Maidang1/hergo/actions/runs/40747889447). This validates the automated Windows transport and terminal path; physical desktop UI and IME checks remain listed below.
 
 ## Build and test
 
@@ -11,7 +11,7 @@ Use a Go installation matching `go.mod` and Python 3.10 or newer. Run the Python
 ```powershell
 python scripts/go.py test ./...
 python scripts/go.py vet ./...
-python scripts/go.py build -trimpath -o artifacts/herdr-ui.exe ./cmd/herdr-ui
+python scripts/go.py build -trimpath -o artifacts/hergo.exe ./cmd/hergo
 python scripts/go.py run github.com/egoist/mygo/cmd/mygo build -platform windows/amd64
 ```
 
@@ -22,8 +22,8 @@ The pinned mygo CLI has no `-skip-installer` option. Its supported build command
 The integration test is opt-in and requires an explicit executable path. It never discovers or connects to your normal Herdr session:
 
 ```powershell
-python scripts/install-herdr-windows.py --destination "$env:TEMP/herdr-ui-test-runtime"
-$env:HERDR_TEST_BINARY = "$env:TEMP/herdr-ui-test-runtime/herdr.exe"
+python scripts/install-herdr-windows.py --destination "$env:TEMP/hergo-test-runtime"
+$env:HERDR_TEST_BINARY = "$env:TEMP/hergo-test-runtime/herdr.exe"
 python scripts/go.py test -tags integration ./integration -run '^TestWindowsNativeSurface$' -count=1 -v -timeout 3m
 ```
 

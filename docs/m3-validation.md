@@ -32,7 +32,7 @@ Divider 通过 fresh export 树的 descendant pane 矩形并集匹配路径，�
 
 系统中文输入法候选/预编辑、真实鼠标拖动、窗口内输入不串 pane、原生复制粘贴、程序接管鼠标/alternate-scroll、持续输出/大粘贴与 resize 交错的系统交互仍需实机验收。自动测试和协议证据不能替代这些验收。M4 参考面板、外观/材质/辅助功能收尾尚未完成。
 
-验证命令：`make test`（含 vet）、`./scripts/go.sh test -race ./...`、未打补丁依赖的纯 Go 核心包测试、`make integration` 五组真实集成、`make package`、`codesign --verify --deep --strict 'dist/darwin-arm64/Herdr UI.app'`。应用输出位于 `dist/darwin-arm64/Herdr UI.app`。没有 push 或修改用户活动服务。
+验证命令：`make test`（含 vet）、`./scripts/go.sh test -race ./...`、未打补丁依赖的纯 Go 核心包测试、`make integration` 五组真实集成、`make package`、`codesign --verify --deep --strict 'dist/darwin-arm64/Hergo.app'`。应用输出位于 `dist/darwin-arm64/Hergo.app`。没有 push 或修改用户活动服务。
 
 独立规格与质量审查中修复了：保留 Ctrl-B 绑定误报、ResizeMode 规则与嵌套边界、准备阶段 NotSent 分类、zoom 快照归一化、缓存绕过、divider 网格命中偏差，以及只读 export 造成新快照再触发 export 的循环。结果丢失的 split 在重连后不会自动重放，测试确认服务端仅接收到一次请求。
 

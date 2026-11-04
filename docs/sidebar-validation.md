@@ -28,8 +28,8 @@ agents独立按工作区分组，包含实际报告agent的pane，显示工作�
 - Collector：相同源不因Session revision重复采集、最新源取消旧任务、输入及发布数据独立复制、关闭清理。
 - 原有M0–M4的协议、焦点、分屏、比例、IME状态机与资源回归保留；完整race/vet、五组/tmp隔离真实服务及原生窗口集成、构建/打包/签名验证。
 
-只读核对当前实际会话：七个工作区分支可读取，coze-loop-frontend为↑13/↓11；deepseek-harness端口8080/8081/9200、daimon3180、dsh4310可按实际cwd核实，herdr-ui的当前子进程监听也能按身份归属。旧截图中的52325/9900当前进程cwd分别为临时测试目录和.bifrost，4331/4340位于dsh-upstream-kernel兄弟目录；在没有明确归属证据时不挂到截图所示工作区。端口随当前进程启停变化，不是固定配置或截图常量。
+只读核对当前实际会话：七个工作区分支可读取，coze-loop-frontend为↑13/↓11；deepseek-harness端口8080/8081/9200、daimon3180、dsh4310可按实际cwd核实，hergo的当前子进程监听也能按身份归属。旧截图中的52325/9900当前进程cwd分别为临时测试目录和.bifrost，4331/4340位于dsh-upstream-kernel兄弟目录；在没有明确归属证据时不挂到截图所示工作区。端口随当前进程启停变化，不是固定配置或截图常量。
 
 界面渲染使用测试快照，只验证原生侧栏信息与交互，不冒充真实终端/操作系统截图。系统IME、实际鼠标和VoiceOver等M0/M4尚需实机验收的边界保持不变。
 
-另用当前只读session快照和已采集Publication生成侧栏实际数据预览：`dist/sidebar-renders/live-sidebar-dark-{false,true}.png`。opt-in测试通过HERDR_UI_SIDEBAR_SNAPSHOT/HERDR_UI_SIDEBAR_METADATA/HERDR_UI_RENDER_DIR读取指定本地文件，不创建terminal host、不发服务调用、不取得owner。它是实际数据的headless侧栏渲染，仍不是操作系统截图。
+另用当前只读session快照和已采集Publication生成侧栏实际数据预览：`dist/sidebar-renders/live-sidebar-dark-{false,true}.png`。opt-in测试通过HERGO_SIDEBAR_SNAPSHOT/HERGO_SIDEBAR_METADATA/HERGO_RENDER_DIR读取指定本地文件，不创建terminal host、不发服务调用、不取得owner。它是实际数据的headless侧栏渲染，仍不是操作系统截图。

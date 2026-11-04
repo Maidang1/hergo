@@ -4,7 +4,7 @@
 
 Hergo 取名自 **Her**dr 与 my**go**。使用 Go 和 [mygo](https://github.com/egoist/mygo) 构建，支持 macOS、Windows x64 与 Linux amd64/arm64。界面与终端不依赖 WebView，运行时无需 Node.js。
 
-[下载最新版本](https://github.com/Maidang1/herdr-ui/releases/latest) · [更新记录](CHANGELOG.md) · [反馈问题](https://github.com/Maidang1/herdr-ui/issues)
+[下载最新版本](https://github.com/Maidang1/hergo/releases/latest) · [更新记录](CHANGELOG.md) · [反馈问题](https://github.com/Maidang1/hergo/issues)
 
 ## 功能
 
@@ -39,7 +39,7 @@ Hergo 不携带 Herdr 可执行文件。它使用本机安装的 Herdr，并在�
 
 ## 安装
 
-从 [GitHub Releases](https://github.com/Maidang1/herdr-ui/releases) 安装 Hergo 后即可打开。尚未安装 [Herdr](https://github.com/herdrdev/herdr) 时，窗口里的 **Install Herdr** 会运行官方安装脚本（Unix 为 [install.sh](https://herdr.dev/install.sh)，Windows 为 [install.ps1](https://herdr.dev/install.ps1)）。也可以选择本机已有的 `herdr`。Windows 和 Linux 的 CI 集成测试使用 Herdr 0.9.5；API 接入以实际运行的 Herdr 版本为准。
+从 [GitHub Releases](https://github.com/Maidang1/hergo/releases) 安装 Hergo 后即可打开。尚未安装 [Herdr](https://github.com/herdrdev/herdr) 时，窗口里的 **Install Herdr** 会运行官方安装脚本（Unix 为 [install.sh](https://herdr.dev/install.sh)，Windows 为 [install.ps1](https://herdr.dev/install.ps1)）。也可以选择本机已有的 `herdr`。Windows 和 Linux 的 CI 集成测试使用 Herdr 0.9.5；API 接入以实际运行的 Herdr 版本为准。
 
 | 平台 | 安装包 | 说明 |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ Windows 使用原生 endpoint 渲染，不启动 `herdr terminal attach`。快�
 
 下载与 CPU 架构匹配的安装包：`amd64` 对应 x86_64，`arm64` 对应 aarch64。
 
-- **Debian / Ubuntu**：使用 `sudo apt install ./hergo_<version>_<arch>.deb` 安装，再运行 `herdr-ui`。
+- **Debian / Ubuntu**：使用 `sudo apt install ./hergo_<version>_<arch>.deb` 安装，再运行 `hergo`。
 - **用户级安装**：从同一 release 下载 `install.sh` 与对应便携归档，以普通用户执行 `sh install.sh ./hergo-<version>-linux-<arch>.tar.gz`。
 - **便携运行**：完整解压归档后运行其中的 `./hergo`，保留终端动态库与其他资源。
 
@@ -131,8 +131,8 @@ Hergo Light 和 Hergo Dark 分别固定使用 Hergo 自带的浅色与深色；�
 需要 `go.mod` 指定的 Go 版本（当前为 1.27.1）、Python 3.10+，以及运行原生窗口所需的平台环境。本机已安装 Herdr 且没有用 `-socket` 指定会话时，Hergo 会在默认服务未运行时启动它。集成测试传入 `-socket`，因此不会启动用户自己的服务。
 
 ```sh
-git clone https://github.com/Maidang1/herdr-ui.git
-cd herdr-ui
+git clone https://github.com/Maidang1/hergo.git
+cd hergo
 make test
 make build
 make run
@@ -157,8 +157,8 @@ Windows 使用 `python scripts/go.py` 包装器；具体命令见平台文档。
 指定 Herdr 可执行文件或 socket：
 
 ```sh
-./bin/herdr-ui -herdr /path/to/herdr
-./bin/herdr-ui -socket /path/to/herdr.sock
+./bin/hergo -herdr /path/to/herdr
+./bin/hergo -socket /path/to/herdr.sock
 ```
 
 ### 图标
@@ -201,4 +201,4 @@ CI 测试不能替代实机桌面验收。Windows IME、AltGr、DPI 与完整交
 - [Lucide 图标许可证](internal/icons/LICENSE-lucide)
 - [Lobe 图标许可证](internal/icons/LICENSE-lobe)
 
-名称迁移说明：Hergo 原名 Herdr UI。仓库地址、应用标识、更新公钥与偏好存储路径保持不变；源码命令仍为 `herdr-ui`。新包中的应用名为 Hergo，Linux 包名为 `hergo`，兼容命令仍为 `herdr-ui`。旧安装目录可能保留原名称，Linux 新安装位于 `~/.local/hergo.app`（用户级）或 `/opt/hergo`（系统级）。不要同时保留两个安装入口；跨名称更新仍需各平台实机验证。
+名称迁移说明：应用标识为 `dev.hergo`，源码入口为 `cmd/hergo`，各平台启动命令为 `hergo`。偏好保存到系统配置目录下的 `hergo/prefs.json`；新路径不存在时读取旧版偏好，后续修改写入新路径。GitHub 仓库与更新源为 `Maidang1/hergo`，更新公钥保持不变。Linux 新安装位于 `~/.local/hergo.app`（用户级）或 `/opt/hergo`（系统级）。应用标识变更及跨名称更新仍需各平台实机验证。

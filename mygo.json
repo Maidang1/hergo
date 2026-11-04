@@ -1,13 +1,13 @@
 {
   "name": "Hergo",
-  "identifier": "dev.herdr.ui",
+  "identifier": "dev.hergo",
   "version": "0.0.20",
   "icon": "assets/app/icon.png",
-  "main": "./cmd/herdr-ui",
+  "main": "./cmd/hergo",
   "out": "dist",
   "linux": {
     "webview": false,
-    "command": "herdr-ui",
+    "command": "hergo",
     "categories": ["Development", "TerminalEmulator"],
     "comment": "Native desktop client for Herdr workspaces and terminals"
   },
@@ -22,6 +22,6 @@
   ],
   "updates": {
     "publicKey": "wxS8IPnKAsClT2jm8fQBLI2AkiVFZFSOLC64H+OIZSw=",
-    "github": "Maidang1/herdr-ui"
+    "github": "Maidang1/hergo"
   }
 }

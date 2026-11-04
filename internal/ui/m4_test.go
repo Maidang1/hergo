@@ -2,9 +2,9 @@ package ui
 
 import (
 	"fmt"
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/input"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/input"
+	"github.com/Maidang1/hergo/internal/session"
 	native "github.com/egoist/mygo/ui"
 	"image/png"
 	"os"
@@ -153,9 +153,9 @@ func TestMinimalControlsReserveTrafficLightsWithoutInformationHeader(t *testing.
 	}
 }
 func TestM4ChromeRenderArtifacts(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR to export native chrome renders")
+		t.Skip("set HERGO_RENDER_DIR to export native chrome renders")
 	}
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		t.Fatal(err)

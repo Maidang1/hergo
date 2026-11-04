@@ -9,12 +9,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/endpoint"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/input"
-	"github.com/Maidang1/herdr-ui/internal/session"
-	view "github.com/Maidang1/herdr-ui/internal/ui"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/endpoint"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/input"
+	"github.com/Maidang1/hergo/internal/session"
+	view "github.com/Maidang1/hergo/internal/ui"
 	"github.com/egoist/mygo"
 	"github.com/egoist/mygo/transfer"
 )

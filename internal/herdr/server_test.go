@@ -11,8 +11,8 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	if os.Getenv("HERDR_UI_FAKE_SERVER") == "1" {
-		marker := os.Getenv("HERDR_UI_FAKE_MARKER")
+	if os.Getenv("HERGO_FAKE_SERVER") == "1" {
+		marker := os.Getenv("HERGO_FAKE_MARKER")
 		if marker == "" {
 			os.Exit(2)
 		}
@@ -114,8 +114,8 @@ func TestEnsureServerReportsAStartFailure(t *testing.T) {
 
 func TestStartDetachedServerRunsTheBinary(t *testing.T) {
 	marker := filepath.Join(t.TempDir(), "ran")
-	t.Setenv("HERDR_UI_FAKE_SERVER", "1")
-	t.Setenv("HERDR_UI_FAKE_MARKER", marker)
+	t.Setenv("HERGO_FAKE_SERVER", "1")
+	t.Setenv("HERGO_FAKE_MARKER", marker)
 	exe, err := os.Executable()
 	if err != nil {
 		t.Fatal(err)

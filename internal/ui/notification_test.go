@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
+	"github.com/Maidang1/hergo/internal/app"
 	native "github.com/egoist/mygo/ui"
 )
 

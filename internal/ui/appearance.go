@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"github.com/Maidang1/herdr-ui/internal/design"
+	"github.com/Maidang1/hergo/internal/design"
 	native "github.com/egoist/mygo/ui"
 )
 

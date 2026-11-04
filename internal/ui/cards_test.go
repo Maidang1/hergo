@@ -2,9 +2,9 @@ package ui
 
 import (
 	"fmt"
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/layout"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/layout"
 	native "github.com/egoist/mygo/ui"
 	"image/png"
 	"os"
@@ -80,7 +80,7 @@ func TestTerminalCornersFollowThePanel(t *testing.T) {
 }
 
 func TestSplitCardRenderArtifacts(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
 		t.Skip("set render directory")
 	}

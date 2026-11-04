@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/localipc"
+	"github.com/Maidang1/hergo/internal/localipc"
 )
 
 // callLong owns an independent connection for a request the server answers

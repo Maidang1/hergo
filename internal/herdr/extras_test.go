@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/localipc"
+	"github.com/Maidang1/hergo/internal/localipc"
 )
 
 // fakeServer answers each request with reply(method, params), recording

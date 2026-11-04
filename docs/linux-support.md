@@ -29,11 +29,11 @@ Download the matching package and checksum file from the same GitHub release:
 ```sh
 sha256sum -c Hergo-<version>-linux-<arch>-SHA256SUMS --ignore-missing
 sudo apt install ./hergo_<version>_<arch>.deb
-herdr-ui
+hergo
 ```
 
 The package installs the application and bundled terminal library in
-`/opt/hergo`, adds `/usr/bin/herdr-ui`, and registers its icon and desktop
+`/opt/hergo`, adds `/usr/bin/hergo`, and registers its icon and desktop
 entry. APT installs GTK 3 (`libgtk-3-0` or `libgtk-3-0t64`). This is not an APT
 repository: install the new release's `.deb` to update. Normal users cannot
 replace the system-owned application, so background in-app updates are disabled
@@ -58,11 +58,11 @@ signed update manifests refer to that exact name.
 ```sh
 sha256sum -c Hergo-<version>-linux-<arch>-SHA256SUMS --ignore-missing
 sh install.sh ./hergo-<version>-linux-<arch>.tar.gz
-herdr-ui
+hergo
 ```
 
 Run the installer as your normal user, not with sudo. It installs under
-`~/.local/hergo.app`, adds `~/.local/bin/herdr-ui` and registers a desktop
+`~/.local/hergo.app`, adds `~/.local/bin/hergo` and registers a desktop
 entry. Ensure `~/.local/bin` is on PATH, or launch from the applications menu.
 A writable user-local installation supports the native signed updater using
 `update-linux-amd64.json` or `update-linux-arm64.json` and the existing Ed25519
@@ -107,8 +107,8 @@ Integration tests never connect to your existing session. Linux requires an
 explicit Herdr executable rather than discovering your normal installation:
 
 ```sh
-python3 scripts/install-herdr-linux.py --arch amd64 --destination /tmp/herdr-ui-runtime
-export HERDR_TEST_BINARY=/tmp/herdr-ui-runtime/herdr
+python3 scripts/install-herdr-linux.py --arch amd64 --destination /tmp/hergo-runtime
+export HERDR_TEST_BINARY=/tmp/hergo-runtime/herdr
 make integration
 ```
 

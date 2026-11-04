@@ -2,7 +2,7 @@ package terminalhost
 
 import (
 	"context"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/hergo/internal/herdr"
 	"github.com/egoist/mygo/transfer"
 	"runtime"
 	"sync"

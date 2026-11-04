@@ -3,15 +3,15 @@ package ui
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Maidang1/herdr-ui/internal/app"
+	"github.com/Maidang1/hergo/internal/app"
 	"image/png"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/session"
 	native "github.com/egoist/mygo/ui"
 )
 
@@ -84,9 +84,9 @@ func TestDetailsReminderKeepsDisplayedTarget(t *testing.T) {
 }
 
 func TestRenderFeatureArtifacts(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR")
+		t.Skip("set HERGO_RENDER_DIR")
 	}
 	os.MkdirAll(dir, 0755)
 	for _, dark := range []bool{false, true} {

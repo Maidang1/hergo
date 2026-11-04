@@ -10,13 +10,14 @@ class BrandingTests(unittest.TestCase):
     def test_name_and_stable_update_identity(self):
         config = json.loads((ROOT / 'mygo.json').read_text())
         self.assertEqual(config['name'], 'Hergo')
-        self.assertEqual(config['identifier'], 'dev.herdr.ui')
-        self.assertEqual(config['updates']['github'], 'Maidang1/herdr-ui')
+        self.assertEqual(config['identifier'], 'dev.hergo')
+        self.assertEqual(config['main'], './cmd/hergo')
+        self.assertEqual(config['updates']['github'], 'Maidang1/hergo')
         self.assertEqual(config['updates']['publicKey'], 'wxS8IPnKAsClT2jm8fQBLI2AkiVFZFSOLC64H+OIZSw=')
-        self.assertEqual(config['linux']['command'], 'herdr-ui')
+        self.assertEqual(config['linux']['command'], 'hergo')
 
     def test_visible_branding(self):
-        for name in ('cmd/herdr-ui/main.go', 'cmd/herdr-ui/state.go',
+        for name in ('cmd/hergo/main.go', 'cmd/hergo/state.go',
                      'internal/ui/settings.go', 'internal/ui/settings_updates.go'):
             source = (ROOT / name).read_text()
             self.assertNotIn('Herdr UI', source)

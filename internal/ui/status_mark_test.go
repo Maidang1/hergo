@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/design"
+	"github.com/Maidang1/hergo/internal/design"
 	native "github.com/egoist/mygo/ui"
 )
 
@@ -62,9 +62,9 @@ func TestWorkingAndWaitingMarksAnimateUnlessMotionIsReduced(t *testing.T) {
 }
 
 func TestStatusMarkRenderArtifacts(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR to export status marks")
+		t.Skip("set HERGO_RENDER_DIR to export status marks")
 	}
 	for _, dark := range []bool{false, true} {
 		tester := native.NewTester(func(c *native.Context) {

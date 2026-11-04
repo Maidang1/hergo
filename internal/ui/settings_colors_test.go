@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Maidang1/herdr-ui/internal/design"
+	"github.com/Maidang1/hergo/internal/design"
 	native "github.com/egoist/mygo/ui"
 )
 
@@ -63,9 +63,9 @@ func TestColorSchemeErrorKeepsAppliedChoice(t *testing.T) {
 }
 
 func TestRenderHerdrColors(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR to export color renders")
+		t.Skip("set HERGO_RENDER_DIR to export color renders")
 	}
 	for _, name := range []string{"gruvbox", "catppuccin-latte", "monokai-pro", "monokai-pro-light"} {
 		w := settingsWindow(t)

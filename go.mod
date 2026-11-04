@@ -1,4 +1,4 @@
-module github.com/Maidang1/herdr-ui
+module github.com/Maidang1/hergo
 
 go 1.27.1
 

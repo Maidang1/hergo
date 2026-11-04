@@ -14,9 +14,9 @@ import (
 // without it, with and without a menu open, in both appearances, for
 // review of its surfaces.
 func TestRenderWindowArtifacts(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR to export window renders")
+		t.Skip("set HERGO_RENDER_DIR to export window renders")
 	}
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		t.Fatal(err)

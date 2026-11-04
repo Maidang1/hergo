@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/session"
-	"github.com/Maidang1/herdr-ui/internal/sidebarinfo"
+	"github.com/Maidang1/hergo/internal/session"
+	"github.com/Maidang1/hergo/internal/sidebarinfo"
 )
 
 type View struct {

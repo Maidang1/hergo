@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Maidang1/herdr-ui/internal/gitdiff"
-	"github.com/Maidang1/herdr-ui/internal/session"
-	"github.com/Maidang1/herdr-ui/internal/sidebarinfo"
+	"github.com/Maidang1/hergo/internal/gitdiff"
+	"github.com/Maidang1/hergo/internal/session"
+	"github.com/Maidang1/hergo/internal/sidebarinfo"
 	native "github.com/egoist/mygo/ui"
 	"github.com/egoist/mygo/ui/editor"
 )
@@ -527,7 +527,7 @@ func TestChangesRenderSizesAndThemes(t *testing.T) {
 					t.Fatalf("%v dark=%t %s has invalid bounds: %+v", size, dark, label, r)
 				}
 			}
-			if dir := os.Getenv("HERDR_UI_RENDER_DIR"); dir != "" {
+			if dir := os.Getenv("HERGO_RENDER_DIR"); dir != "" {
 				if err := os.MkdirAll(dir, 0755); err != nil {
 					t.Fatal(err)
 				}

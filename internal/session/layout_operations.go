@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/layout"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/layout"
 )
 
 func (s *Session) readTree(ctx context.Context, client *herdr.Client, op Operation) (*layout.Node, string, error) {

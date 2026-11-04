@@ -11,9 +11,9 @@ import (
 )
 
 func TestRenderFindFixture(t *testing.T) {
-	dir := os.Getenv("HERDR_UI_RENDER_DIR")
+	dir := os.Getenv("HERGO_RENDER_DIR")
 	if dir == "" {
-		t.Skip("set HERDR_UI_RENDER_DIR to export native chrome renders")
+		t.Skip("set HERGO_RENDER_DIR to export native chrome renders")
 	}
 	for _, dark := range []bool{false, true} {
 		w := findWindow(t)

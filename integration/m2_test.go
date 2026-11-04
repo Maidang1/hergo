@@ -11,8 +11,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/session"
 	"github.com/egoist/mygo/plugins/terminal"
 )
 
@@ -21,9 +21,9 @@ func TestMultiPaneWindowAttachesAllVisibleAndClosesLocally(t *testing.T) {
 	testWindowLifecycle(t, true)
 }
 func testWindowLifecycle(t *testing.T, multi bool) {
-	windowBinary := os.Getenv("HERDR_UI_M0_WINDOW_BINARY")
+	windowBinary := os.Getenv("HERGO_M0_WINDOW_BINARY")
 	if windowBinary == "" {
-		t.Skip("set HERDR_UI_M0_WINDOW_BINARY to test the real window")
+		t.Skip("set HERGO_M0_WINDOW_BINARY to test the real window")
 	}
 	binary := unixTestBinary(t)
 	dir, err := os.MkdirTemp("/tmp", "herdr-m2-")

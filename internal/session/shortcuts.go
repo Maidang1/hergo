@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Maidang1/herdr-ui/internal/herdr"
+	"github.com/Maidang1/hergo/internal/herdr"
 )
 
 // shortcutRequest is a closed mapping: shortcuts cannot issue arbitrary RPCs.

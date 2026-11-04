@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Maidang1/herdr-ui/internal/session"
+	"github.com/Maidang1/hergo/internal/session"
 )
 
 func toastSnapshot(t *testing.T, status string) *session.Snapshot {

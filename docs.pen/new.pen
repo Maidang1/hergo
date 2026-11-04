@@ -178,7 +178,7 @@
                 {
                   "type": "frame",
                   "id": "R5Ez0",
-                  "name": "Source workspace herdr-ui",
+                  "name": "Source workspace hergo",
                   "width": "fill_container",
                   "height": 42,
                   "fill": "#00000000",
@@ -220,7 +220,7 @@
                               "id": "Vp9N1",
                               "name": "Workspace title",
                               "fill": "$text.primary",
-                              "content": "herdr-ui",
+                              "content": "hergo",
                               "fontFamily": "$font.ui",
                               "fontSize": 13,
                               "fontWeight": "600"
@@ -927,7 +927,7 @@
                   "id": "hnOCh",
                   "name": "Current checkout path",
                   "fill": "$text.tertiary",
-                  "content": "…/herdr-ui/fix-login",
+                  "content": "…/hergo/fix-login",
                   "fontFamily": "$font.ui",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -1002,7 +1002,7 @@
                   "id": "blPqb",
                   "name": "Codex location",
                   "fill": "$text.secondary",
-                  "content": "directory: ~/.herdr/worktrees/herdr-ui/fix-login",
+                  "content": "directory: ~/.herdr/worktrees/hergo/fix-login",
                   "fontFamily": "$font.mono",
                   "fontSize": 13,
                   "fontWeight": "normal"
@@ -1328,7 +1328,7 @@
                 {
                   "type": "frame",
                   "id": "OYOkz",
-                  "name": "Source workspace herdr-ui",
+                  "name": "Source workspace hergo",
                   "width": "fill_container",
                   "height": 42,
                   "fill": "#00000000",
@@ -1370,7 +1370,7 @@
                               "id": "UuwdM",
                               "name": "Workspace title",
                               "fill": "$text.primary",
-                              "content": "herdr-ui",
+                              "content": "hergo",
                               "fontFamily": "$font.ui",
                               "fontSize": 13,
                               "fontWeight": "600"
@@ -2077,7 +2077,7 @@
                   "id": "SwHt8",
                   "name": "Current checkout path",
                   "fill": "$text.tertiary",
-                  "content": "…/herdr-ui/fix-login",
+                  "content": "…/hergo/fix-login",
                   "fontFamily": "$font.ui",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -2425,11 +2425,11 @@
                             {
                               "type": "text",
                               "id": "DZRob",
-                              "name": "zsh output herdr-ui  worktree/fix-l",
+                              "name": "zsh output hergo  worktree/fix-l",
                               "fill": "$text.secondary",
                               "textGrowth": "fixed-width",
                               "width": "fill_container",
-                              "content": "herdr-ui  worktree/fix-login",
+                              "content": "hergo  worktree/fix-login",
                               "lineHeight": 1.5,
                               "fontFamily": "$font.mono",
                               "fontSize": 13,
@@ -3112,7 +3112,7 @@
                 {
                   "type": "frame",
                   "id": "RRi30",
-                  "name": "Source workspace herdr-ui",
+                  "name": "Source workspace hergo",
                   "width": "fill_container",
                   "height": 42,
                   "fill": "#00000000",
@@ -3154,7 +3154,7 @@
                               "id": "PC5Bq",
                               "name": "Workspace title",
                               "fill": "$text.primary",
-                              "content": "herdr-ui",
+                              "content": "hergo",
                               "fontFamily": "$font.ui",
                               "fontSize": 13,
                               "fontWeight": "600"
@@ -3861,7 +3861,7 @@
                   "id": "QDbJP",
                   "name": "Current checkout path",
                   "fill": "$text.tertiary",
-                  "content": "…/herdr-ui/fix-login",
+                  "content": "…/hergo/fix-login",
                   "fontFamily": "$font.ui",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -3936,7 +3936,7 @@
                   "id": "OQIjP",
                   "name": "Codex location",
                   "fill": "$text.secondary",
-                  "content": "directory: ~/.herdr/worktrees/herdr-ui/fix-login",
+                  "content": "directory: ~/.herdr/worktrees/hergo/fix-login",
                   "fontFamily": "$font.mono",
                   "fontSize": 13,
                   "fontWeight": "normal"
@@ -4320,7 +4320,7 @@
                 {
                   "type": "frame",
                   "id": "goZUV",
-                  "name": "Source workspace herdr-ui",
+                  "name": "Source workspace hergo",
                   "width": "fill_container",
                   "height": 42,
                   "fill": "#00000000",
@@ -4362,7 +4362,7 @@
                               "id": "wDSkO",
                               "name": "Workspace title",
                               "fill": "$text.primary",
-                              "content": "herdr-ui",
+                              "content": "hergo",
                               "fontFamily": "$font.ui",
                               "fontSize": 13,
                               "fontWeight": "600"
@@ -5111,7 +5111,7 @@
                   "id": "bSgBV",
                   "name": "Current checkout path",
                   "fill": "$text.tertiary",
-                  "content": "…/herdr-ui/fix-login",
+                  "content": "…/hergo/fix-login",
                   "fontFamily": "$font.ui",
                   "fontSize": 12,
                   "fontWeight": "normal"
@@ -5186,7 +5186,7 @@
                   "id": "wGJSc",
                   "name": "Codex location",
                   "fill": "$text.secondary",
-                  "content": "directory: ~/.herdr/worktrees/herdr-ui/fix-login",
+                  "content": "directory: ~/.herdr/worktrees/hergo/fix-login",
                   "fontFamily": "$font.mono",
                   "fontSize": 13,
                   "fontWeight": "normal"

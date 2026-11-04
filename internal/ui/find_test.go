@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/Maidang1/herdr-ui/internal/app"
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/Maidang1/herdr-ui/internal/herdr"
-	"github.com/Maidang1/herdr-ui/internal/input"
-	"github.com/Maidang1/herdr-ui/internal/layout"
-	"github.com/Maidang1/herdr-ui/internal/session"
-	"github.com/Maidang1/herdr-ui/internal/terminalhost"
+	"github.com/Maidang1/hergo/internal/app"
+	"github.com/Maidang1/hergo/internal/design"
+	"github.com/Maidang1/hergo/internal/herdr"
+	"github.com/Maidang1/hergo/internal/input"
+	"github.com/Maidang1/hergo/internal/layout"
+	"github.com/Maidang1/hergo/internal/session"
+	"github.com/Maidang1/hergo/internal/terminalhost"
 	"github.com/egoist/mygo/plugins/terminal"
 	native "github.com/egoist/mygo/ui"
 )
@@ -26,7 +26,7 @@ func findWindow(t *testing.T) *Window {
 	a := app.New()
 	a.Update(session.PublishedSnapshot{TargetID: 7, Epoch: 3, State: session.Ready, Snapshot: snapshot})
 	a.SelectPane("p1")
-	host := terminalhost.New(terminalhost.Config{Binary: "/usr/bin/true", Target: herdr.Target{Socket: "/tmp/herdr-ui-find-test.sock"}, Post: func(fn func()) { fn() }})
+	host := terminalhost.New(terminalhost.Config{Binary: "/usr/bin/true", Target: herdr.Target{Socket: "/tmp/hergo-find-test.sock"}, Post: func(fn func()) { fn() }})
 	t.Cleanup(func() { _ = host.Close(context.Background()) })
 	w := New(a, nil)
 	bindings, err := input.Resolve(nil, "test")

@@ -30,7 +30,7 @@
 | `make integration` | M0 原生窗口/direct attach 全套回归，以及 M1 隔离真实服务事件验证通过 |
 | 真实事件 | 测试外部创建 workspace、改名、报告 agent working→blocked、关闭 workspace，Session 通过事件自动更新，全过程无手动 Refresh、无 epoch 误递增 |
 | 实际用户服务 | 默认原生应用运行到 epoch=1、revision=2、Ready，随后自动关闭；没有获取 terminal owner 或执行修改 RPC |
-| `make package` | CGO_ENABLED=0 构建本地签名 `dist/darwin-arm64/Herdr UI.app`，包含 libghostty-vt 与图标许可证 |
+| `make package` | CGO_ENABLED=0 构建本地签名 `dist/darwin-arm64/Hergo.app`，包含 libghostty-vt 与图标许可证 |
 
 集成测试只修改自己在 `/tmp` 创建的独立服务。测试里的短时等待用于观察验收条件，不是产品轮询逻辑。
 
