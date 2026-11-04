@@ -104,7 +104,7 @@ Windows 使用原生 endpoint 渲染，不启动 `herdr terminal attach`。快�
 
 Hergo 默认自动跟随 Herdr 的 `config.toml` 配色，无需在设置中选择。启动时读取配置，运行期间每秒检测一次文件内容变化，自动同步窗口与终端的默认背景、文字和选区。已有偏好文件没有 `color_scheme` 时也使用此默认行为；明确保存的配色选择继续保留。
 
-如需单独设置 Hergo，在 **Settings → Appearance** 关闭 **Follow Herdr** 开关，再在下方 **Theme** 中直接选择 System、Hergo Light、Hergo Dark 或 Herdr 内置主题。System 根据系统外观切换 Hergo Light 与 Hergo Dark。重新打开开关即可恢复自动跟随；手动主题在跟随期间不可修改。
+如需单独设置 Hergo，在 **Settings → Appearance** 关闭 **Follow Herdr** 开关，再在下方 **Theme** 中直接选择 System、Hergo Light、Hergo Dark、Herdr 内置主题或本地新增的 **Monokai Pro**（`monokai-pro`）和 **Monokai Pro Light**（`monokai-pro-light`）。这两个主题分别固定使用上游的暗色和亮色配色。System 根据系统外观切换 Hergo Light 与 Hergo Dark。重新打开开关即可恢复自动跟随；手动主题在跟随期间不可修改。
 
 跟随配置时支持 `[theme]` 的 `name`、`auto_switch`、`dark_name`、`light_name`，以及 `[theme.custom]` 和亮暗覆盖。例如：
 
@@ -116,7 +116,9 @@ dark_name = "gruvbox"
 light_name = "gruvbox-light"
 ```
 
-Hergo Light 和 Hergo Dark 分别固定使用 Hergo 自带的浅色与深色；其他固定名称的主题保持自身的亮暗风格。修改 Herdr 配置后自动应用；配置暂时无法读取或解析时保留当前配色，下次修改后重试。内置色值来自固定版本的 Herdr 源码，随 Hergo 更新；终端的 ANSI 调色板继续由终端插件提供。
+跟随配置时，`name = "monokai-pro"`（或 `"monokai-pro-light"`）配合 `auto_switch = true`，Hergo 会按系统外观在这两个本地配色之间切换；Herdr 本身是否支持这些名称取决于其版本。
+
+Hergo Light 和 Hergo Dark 分别固定使用 Hergo 自带的浅色与深色；其他固定名称的主题保持自身的亮暗风格。修改 Herdr 配置后自动应用；配置暂时无法读取或解析时保留当前配色，下次修改后重试。Herdr 内置色值来自固定版本的 Herdr 源码，本地主题随 Hergo 一同提供。Monokai Pro 的亮暗色值、选区混色和终端 16 色 ANSI 调色板直接取自 `loctvl842/monokai-pro.nvim` 的 `pro.lua`、`light.lua` 和主题映射；其他主题的 ANSI 调色板继续由终端插件提供。
 
 ### 自动更新
 

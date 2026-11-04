@@ -13,8 +13,17 @@ import (
 )
 
 func TestColorSchemeAppliesToWindowAndSettings(t *testing.T) {
+	for _, name := range []string{"gruvbox", "monokai-pro", "monokai-pro-light"} {
+		t.Run(name, func(t *testing.T) {
+			testColorSchemeAppliesToWindowAndSettings(t, name)
+		})
+	}
+}
+
+func testColorSchemeAppliesToWindowAndSettings(t *testing.T, name string) {
+	t.Helper()
 	w := settingsWindow(t)
-	light, dark, err := design.HerdrThemes("", "gruvbox")
+	light, dark, err := design.HerdrThemes("", name)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -22,7 +31,7 @@ func TestColorSchemeAppliesToWindowAndSettings(t *testing.T) {
 		w.SetColorThemes(light, dark)
 		return nil
 	}})
-	w.chooseColorScheme("gruvbox")
+	w.chooseColorScheme(name)
 	for _, view := range []func(*native.Context){w.View, w.SettingsView} {
 		var got *native.Theme
 		tester := native.NewTester(func(c *native.Context) { view(c); got = c.Theme() }, 1000, 900)
@@ -39,7 +48,7 @@ func TestColorSchemeAppliesToWindowAndSettings(t *testing.T) {
 		}
 	}, 720, 520)
 	tester.Frame()
-	if w.settings.snapshot.ColorScheme != "gruvbox" {
+	if w.settings.snapshot.ColorScheme != name {
 		t.Fatal("selection lost")
 	}
 }
@@ -58,7 +67,7 @@ func TestRenderHerdrColors(t *testing.T) {
 	if dir == "" {
 		t.Skip("set HERDR_UI_RENDER_DIR to export color renders")
 	}
-	for _, name := range []string{"gruvbox", "catppuccin-latte"} {
+	for _, name := range []string{"gruvbox", "catppuccin-latte", "monokai-pro", "monokai-pro-light"} {
 		w := settingsWindow(t)
 		light, dark, err := design.HerdrThemes("", name)
 		if err != nil {
@@ -67,7 +76,7 @@ func TestRenderHerdrColors(t *testing.T) {
 		w.SetColorThemes(light, dark)
 		w.chooseColorScheme(name)
 		for page, view := range map[string]func(*native.Context){"appearance": w.SettingsView, "window": w.View} {
-			tester := native.NewTester(view, 1000, 800)
+			tester := native.NewTester(view, 1000, 1400)
 			tester.SetTitleBar(native.TitleBar{Left: 80, Height: 44})
 			tester.Frame()
 			file, err := os.Create(filepath.Join(dir, fmt.Sprintf("colors-%s-%s.png", name, page)))

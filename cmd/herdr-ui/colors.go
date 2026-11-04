@@ -3,14 +3,15 @@ package main
 import (
 	"context"
 	"crypto/sha256"
-	"github.com/Maidang1/herdr-ui/internal/design"
-	"github.com/egoist/mygo/plugins/terminal"
 	"os"
 	"time"
+
+	"github.com/Maidang1/herdr-ui/internal/design"
+	"github.com/egoist/mygo/plugins/terminal"
 )
 
-// Herdr's themes describe UI tokens, not an ANSI palette. Keep the terminal
-// plugin's ANSI colors while using Herdr's canvas, text and selection colors.
+// Use the resolved canvas, text and selection. Local themes may also provide
+// an ANSI palette; upstream Herdr themes retain the terminal plugin's colors.
 func terminalColorTheme(resolved *design.HerdrTheme) *terminal.Theme {
 	if resolved == nil {
 		return nil
@@ -23,6 +24,9 @@ func terminalColorTheme(resolved *design.HerdrTheme) *terminal.Theme {
 	t.Background, t.Foreground = resolved.Colors.Content, colors.Text
 	t.Cursor, t.CursorText = colors.Text, t.Background
 	t.Selection, t.SelectionText = colors.Selection, colors.Text
+	if resolved.ANSI != nil {
+		t.Palette = *resolved.ANSI
+	}
 	return t
 }
 

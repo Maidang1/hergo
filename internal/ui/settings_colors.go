@@ -19,6 +19,10 @@ func colorSchemeLabel(name string) string {
 		return "Hergo Light"
 	case "hergo-dark":
 		return "Hergo Dark"
+	case "monokai-pro":
+		return "Monokai Pro"
+	case "monokai-pro-light":
+		return "Monokai Pro Light"
 	case "", "herdr":
 		return "Follow Herdr configuration"
 	}

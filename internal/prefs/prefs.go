@@ -17,7 +17,7 @@ import (
 type Settings struct {
 	// WindowTheme is the app appearance: "system", "light" or "dark".
 	WindowTheme string
-	// ColorScheme is "native", "herdr", or a Herdr built-in theme name.
+	// ColorScheme is "native", "herdr", or a built-in theme name.
 	ColorScheme string
 	// FontFamily is the terminal font family; "" is the system's
 	// monospaced font.

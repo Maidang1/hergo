@@ -20,6 +20,8 @@ import (
 type HerdrTheme struct {
 	Theme  *ui.Theme
 	Colors Palette
+	// ANSI is optional; upstream Herdr palettes only describe UI colors.
+	ANSI *[16]ui.Color
 }
 
 //go:embed herdr_palettes.json
@@ -30,12 +32,14 @@ var herdrPalettes = func() map[string]map[string]string {
 	if err := json.Unmarshal(herdrPaletteJSON, &palettes); err != nil {
 		panic(err)
 	}
+	palettes["monokai-pro"] = monokaiProTokens(monokaiProPalette)
+	palettes["monokai-pro-light"] = monokaiProTokens(monokaiProLightPalette)
 	return palettes
 }()
 
-// HerdrThemeNames returns a fresh list of the upstream canonical built-ins.
+// HerdrThemeNames returns a fresh list of upstream and locally added built-ins.
 func HerdrThemeNames() []string {
-	return []string{"catppuccin", "catppuccin-latte", "terminal", "tokyo-night", "tokyo-night-day", "dracula", "nord", "gruvbox", "gruvbox-light", "one-dark", "one-light", "solarized", "solarized-light", "kanagawa", "kanagawa-lotus", "rose-pine", "rose-pine-dawn", "vesper"}
+	return []string{"catppuccin", "catppuccin-latte", "terminal", "tokyo-night", "tokyo-night-day", "dracula", "nord", "gruvbox", "gruvbox-light", "one-dark", "one-light", "solarized", "solarized-light", "kanagawa", "kanagawa-lotus", "rose-pine", "rose-pine-dawn", "vesper", "monokai-pro", "monokai-pro-light"}
 }
 
 func canonicalHerdrName(name string) string {
@@ -77,6 +81,10 @@ func canonicalHerdrName(name string) string {
 		return "rose-pine-dawn"
 	case "vesper":
 		return "vesper"
+	case "monokai-pro", "monokaipro":
+		return "monokai-pro"
+	case "monokai-pro-light", "monokaipro-light":
+		return "monokai-pro-light"
 	}
 	return ""
 }
@@ -97,6 +105,8 @@ func siblingHerdrNames(name string) (string, string) {
 		return "kanagawa", "kanagawa-lotus"
 	case "rose-pine", "rose-pine-dawn":
 		return "rose-pine", "rose-pine-dawn"
+	case "monokai-pro", "monokai-pro-light":
+		return "monokai-pro", "monokai-pro-light"
 	}
 	return name, name
 }
@@ -294,7 +304,13 @@ func resolveHerdr(name string, slotDark bool, custom, mode map[string]*string, l
 	t.Danger, t.Warning, t.Success = p.Danger, tokens["yellow"], p.Success
 	t.Inverse, t.InverseText = p.Text, p.Shell
 	t.Scrollbar = tokens["overlay1"]
-	return &HerdrTheme{Theme: t, Colors: p}
+	resolved := &HerdrTheme{Theme: t, Colors: p}
+	if name == "monokai-pro" {
+		resolved.ANSI = monokaiProANSI(monokaiProPalette)
+	} else if name == "monokai-pro-light" {
+		resolved.ANSI = monokaiProANSI(monokaiProLightPalette)
+	}
+	return resolved
 }
 
 func isHerdrReset(value string) bool {

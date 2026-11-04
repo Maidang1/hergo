@@ -105,6 +105,26 @@ accent = "#abcdef"
 	}
 }
 
+func TestHerdrMonokaiAutoSwitch(t *testing.T) {
+	for _, name := range []string{"monokai-pro", "monokai-pro-light"} {
+		t.Run(name, func(t *testing.T) {
+			path := herdrTestConfig(t, "[theme]\nname = \""+name+"\"\nauto_switch = true\n")
+			light, dark, err := HerdrThemes(path, "herdr")
+			if err != nil {
+				t.Fatal(err)
+			}
+			if light.Theme.Dark || !dark.Theme.Dark ||
+				light.Colors.Content != ui.Hex("#faf4f2") || dark.Colors.Content != ui.Hex("#2d2a2e") {
+				t.Fatal("Monokai Pro did not resolve its light/dark siblings")
+			}
+			if light.ANSI == nil || dark.ANSI == nil ||
+				light.ANSI[1] != ui.Hex("#e14775") || dark.ANSI[1] != ui.Hex("#ff6188") {
+				t.Fatal("Monokai Pro ANSI colors did not follow the system slot")
+			}
+		})
+	}
+}
+
 func TestHerdrFallbacksAndTerminalDefaults(t *testing.T) {
 	path := herdrTestConfig(t, `
 [theme]
