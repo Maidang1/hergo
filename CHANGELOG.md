@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.21
+
+- Add Monokai Pro and Monokai Pro Light themes, including their terminal ANSI palettes and light/dark switching when following Herdr. Include the upstream MIT license in application packages.
+- Complete the Hergo naming migration: use the `hergo` command, `cmd/hergo` entry point, `dev.hergo` application identifier, and `Maidang1/hergo` repository and update source.
+- Save preferences under the `hergo` configuration directory. When the new file is absent, load existing preferences from the previous directory and save subsequent changes to the new path.
+
+The application identifier and command have changed. Cross-name updates and physical Windows and Linux desktop validation remain outstanding.
+
 ## 0.0.20
 
 - Follow herdr-app's startup. Hergo does not bundle Herdr. When Herdr is missing, the window can install it with the official installer or use an executable you choose. When Herdr is installed and the default session is not listening, Hergo starts `herdr server` and leaves it running after the window closes. An explicit socket or named session is left untouched. `-plain` and the Plain terminal startup choice still open a plain terminal.
