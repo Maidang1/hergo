@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#faf9f6">
+  <meta name="robots" content="noindex">
+  <title>404 · Hergo</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 30px; color: oklch(.27 .012 65); background: oklch(.983 .004 80); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif; -webkit-font-smoothing: antialiased; }
+    main { max-width: 560px; text-align: center; }
+    .code { font: 12px Consolas, monospace; color: oklch(.545 .159 38); letter-spacing: .08em; }
+    h1 { font-size: clamp(36px, 8vw, 60px); letter-spacing: -.05em; font-weight: 500; line-height: 1.15; margin: 25px 0; text-wrap: balance; }
+    p { color: oklch(.49 .014 65); font-size: 16px; line-height: 1.8; }
+    a { display: inline-block; margin-top: 25px; padding: 15px 24px; background: oklch(.545 .159 38); color: oklch(.995 .002 60); border-radius: 10px; font-size: 14px; text-decoration: none; }
+    a:focus-visible { outline: 2px solid oklch(.545 .159 38); outline-offset: 5px; }
+  </style>
+</head>
+<body><main><span class="code">Hergo / 404</span><h1>Page not found.<br>Back to your workspace.</h1><p>This page may have moved.<br><span lang="zh-CN">没有找到这个页面，可以返回首页继续浏览。</span></p><a href="./" id="home">Back to Hergo / 返回首页 ↗</a></main>
+<script>
+  // A project Pages site lives below /hergo/. Keep the home link on that site
+  // even when GitHub serves this document for a deeply nested missing path.
+  if (location.hostname.endsWith(".github.io")) {
+    document.getElementById("home").href = "/" + location.pathname.split("/").filter(Boolean)[0] + "/";
+  } else {
+    document.getElementById("home").href = "/";
+  }
+</script>
+</body>
+</html>
