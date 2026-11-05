@@ -181,7 +181,7 @@ def prepare_locked():
         source = replace_once(source, "// pointerEvent reports the pointer to the program that takes the mouse, or\n", POINTER_INPUT + "\n// pointerEvent reports the pointer to the program that takes the mouse, or\n", view)
         source = replace_once(source, "\te.TextCaret(v.caret())\n", "\te.TextCaret(v.caret())\n\te.OptionAsAlt(t.opts.OptionAsAlt)\n", view)
         source = replace_once(source, "\ttheme   *Theme\n", "\tcanvasBackground vt.Color\n\ttheme   *Theme\n", view)
-        source = replace_once(source, "\tif ev.Mods&ui.Cmd != 0 {", "\tif ev.Mods&ui.Cmd != 0 && runtime.GOOS != \"darwin\" {", view)
+        source = replace_once(source, "\tzooming := ev.Mods&ui.Cmd != 0", "\tzooming := ev.Mods&ui.Cmd != 0 && runtime.GOOS != \"darwin\"", view)
         view.write_text(source, encoding="utf-8")
         paint = staged / "plugins/terminal/paint.go"
         source = paint.read_text(encoding="utf-8")
