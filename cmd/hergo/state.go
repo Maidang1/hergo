@@ -250,6 +250,20 @@ func runStateWindow(socket, binary string, closeAfter time.Duration, nativeSurfa
 				post(func() { done(err) })
 			}()
 		}
+		extra.UpdateHerdr = func(done func(error)) {
+			go func() {
+				err := herdr.Update(ctx, target, install.Get().Path)
+				if err == nil {
+					found := install.Refresh(ctx)
+					err = readyInstallation(found)
+					if err == nil && found.Outdated() {
+						err = fmt.Errorf("%s was not replaced; Hergo needs Herdr %s or later", found.Version, herdr.CompatibleVersion)
+					}
+				}
+				integrationPost(func() { done(err) })
+			}()
+		}
+		extra.ServerVersion = func() string { return serverVersion(s) }
 		extra.ChooseHerdr = func(done func(error)) {
 			go func() {
 				opts := mygo.OpenDialogOptions{Parent: win, Title: "Choose Herdr", ButtonLabel: "Use Herdr", Message: "Select the herdr executable."}

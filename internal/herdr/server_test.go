@@ -152,6 +152,47 @@ func TestInstallCommandUsesTheClassicInstaller(t *testing.T) {
 	}
 }
 
+func TestVersionOutdatedComparesAgainstCompatibleVersion(t *testing.T) {
+	for version, want := range map[string]bool{
+		"herdr 0.8.0":            true,
+		"0.8.0":                  true,
+		"herdr 0.9.4":            true,
+		"herdr 0.9.5":            false,
+		"herdr 0.9.10":           false,
+		"herdr 0.10.0-preview.3": false,
+		"v1.0.0":                 false,
+		"":                       false,
+		"herdr nightly":          false,
+	} {
+		if got := VersionOutdated(version); got != want {
+			t.Errorf("VersionOutdated(%q) = %v", version, got)
+		}
+	}
+	if (Installation{Path: "/bin/herdr", Version: "herdr 0.8.0", Error: "exit 1"}).Outdated() {
+		t.Fatal("a broken executable is not an outdated one")
+	}
+}
+
+func TestUpdateCommandFollowsTheInstallation(t *testing.T) {
+	direct := filepath.Join(string(filepath.Separator)+"home", "a", ".local", "bin", "herdr")
+	for _, goos := range []string{"darwin", "linux"} {
+		name, args, handoff := UpdateCommand(goos, direct)
+		if name != direct || strings.Join(args, " ") != "update --handoff" || handoff {
+			t.Fatalf("%s direct: %s %v %v", goos, name, args, handoff)
+		}
+	}
+	name, args, handoff := UpdateCommand("windows", direct)
+	if name != direct || strings.Join(args, " ") != "update" || handoff {
+		t.Fatalf("windows: %s %v %v", name, args, handoff)
+	}
+	prefix := filepath.Join(string(filepath.Separator)+"opt", "homebrew")
+	cellar := filepath.Join(prefix, "Cellar", "herdr", "0.8.0", "bin", "herdr")
+	name, args, handoff = UpdateCommand("darwin", cellar)
+	if name != "sh" || len(args) != 3 || !strings.Contains(args[1], "upgrade herdr") || args[2] != filepath.Join(prefix, "bin", "brew") || !handoff {
+		t.Fatalf("homebrew: %s %v %v", name, args, handoff)
+	}
+}
+
 func TestCandidateDirsIncludeOfficialInstallLocations(t *testing.T) {
 	t.Setenv("LOCALAPPDATA", filepath.Join("C:", "Users", "A", "AppData", "Local"))
 	home := filepath.Join("C:", "Users", "A")

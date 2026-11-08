@@ -18,6 +18,8 @@ type manifestSettings struct {
 	message      string
 	pluginPath   string
 	handoff      string
+	updating     bool
+	update       string
 }
 
 var (
@@ -63,6 +65,9 @@ func (w *Window) settingsHerdr(c *native.Context, p design.Palette) {
 				c.OpenURL(herdr.InstallURL)
 			}
 		})
+		if install.Installed() {
+			w.herdrCompatibilityRow(c, g, install)
+		}
 		g.row("Startup", "Automatic opens Herdr, and offers to install it when it is missing. Plain terminal stays available. Applies the next time Hergo opens.", func() {
 			index := indexOf(startupModes, w.startupMode, 0)
 			if native.Segmented(c.Key("settings-startup-mode"), &index, startupModeLabels...).Shrink(0).Changed() {
@@ -155,6 +160,43 @@ func (w *Window) settingsHerdr(c *native.Context, p design.Palette) {
 	if s.message != "" {
 		native.Text(c, s.message).FontSize(12).TextColor(p.Secondary)
 	}
+}
+
+// herdrCompatibilityRow names the Herdr this Hergo needs and offers to update
+// an older one. The running server counts too: a new executable changes
+// nothing until the sessions move to it.
+func (w *Window) herdrCompatibilityRow(c *native.Context, g *settingsGroup, install herdr.Installation) {
+	s := &w.manifests
+	server := ""
+	if w.extra.ServerVersion != nil {
+		server = w.extra.ServerVersion()
+	}
+	detail := "Hergo works with Herdr " + herdr.CompatibleVersion + " or later."
+	if install.Outdated() {
+		detail = "Hergo needs Herdr " + herdr.CompatibleVersion + " or later for image paste, commands and notifications."
+	} else if herdr.VersionOutdated(server) {
+		detail = "The running Herdr server is still " + server + ". Hand off below, or restart Herdr, to use the installed version."
+	}
+	g.row("Compatible version", fallback(s.update, detail), func() {
+		if install.Outdated() && native.Button(c, "Update Herdr…").Label("Update Herdr").Disabled(s.updating || w.extra.UpdateHerdr == nil).Clicked() {
+			w.ask(shortcutPrompt{title: "Update Herdr?", message: "Hergo installs the latest Herdr for this system and moves running sessions to it where Herdr supports that.", action: "Update", confirm: true}, func(string) { w.updateHerdr() })
+		}
+	})
+}
+
+func (w *Window) updateHerdr() {
+	s := &w.manifests
+	s.updating, s.update = true, "Updating Herdr…"
+	w.extra.UpdateHerdr(func(err error) {
+		s.updating, s.update = false, ""
+		if err != nil {
+			s.update = "Update failed: " + err.Error()
+			return
+		}
+		if w.retry != nil {
+			w.retry()
+		}
+	})
 }
 
 // pluginLinkRows add local plugin development to the plugins page.

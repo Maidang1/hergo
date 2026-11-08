@@ -98,7 +98,7 @@ func keyboardHooks(ctx context.Context, s *session.Session, k *keyboardEndpoint,
 		PasteImage: func(pane string, data []byte) error {
 			client := k.current()
 			if client == nil || !client.Latest().Connected {
-				return fmt.Errorf("Herdr image endpoint is disconnected")
+				return imageEndpointError(serverVersion(s))
 			}
 			cols, rows := screen.SurfaceSize()
 			client.SetSurfaceSize(cols, rows)
@@ -157,6 +157,24 @@ func keyboardHooks(ctx context.Context, s *session.Session, k *keyboardEndpoint,
 		Notices: func() []app.Notice { return k.notices(s.Latest().Snapshot) },
 	}
 }
+
+// serverVersion is the running Herdr server's version, empty when not connected.
+func serverVersion(s *session.Session) string {
+	if snapshot := s.Latest().Snapshot; snapshot != nil {
+		return snapshot.Metadata().Version
+	}
+	return ""
+}
+
+// imageEndpointError separates a server too old to have the endpoint, which
+// retrying cannot fix, from a connection that is merely down.
+func imageEndpointError(version string) error {
+	if herdr.VersionOutdated(version) {
+		return fmt.Errorf("Image paste needs Herdr %s or later. Update it in Settings > Herdr", herdr.CompatibleVersion)
+	}
+	return fmt.Errorf("Herdr image endpoint is disconnected")
+}
+
 func configPath() string {
 	home, _ := os.UserHomeDir()
 	return herdr.ConfigPath(home, os.Getenv)
