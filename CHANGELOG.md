@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.22
+
+- Show the compatible Herdr version in Settings > Herdr. Hergo needs Herdr 0.9.5 or later. When the installed Herdr is older, Update Herdr installs the latest release the way this system and installation require, and moves running sessions to it where Herdr supports that.
+- Say so when image paste fails because the running Herdr server is too old, and point to Settings, instead of reporting a disconnected endpoint.
+- Upgrade mygo to v0.7.4.
+
 ## 0.0.21
 
 - Add Monokai Pro and Monokai Pro Light themes, including their terminal ANSI palettes and light/dark switching when following Herdr. Include the upstream MIT license in application packages.
