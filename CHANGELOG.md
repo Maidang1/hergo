@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.0.23
+
+- Fix the macOS release step, which expected the disk image name used before mygo v0.7.4.
+- Include the Herdr compatibility check and in-app Herdr update from 0.0.22, whose release was blocked by this failure.
+
 ## 0.0.22
 
 - Show the compatible Herdr version in Settings > Herdr. Hergo needs Herdr 0.9.5 or later. When the installed Herdr is older, Update Herdr installs the latest release the way this system and installation require, and moves running sessions to it where Herdr supports that.
