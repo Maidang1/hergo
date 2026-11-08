@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/Maidang1/hergo/internal/endpoint"
+	"github.com/Maidang1/hergo/internal/herdr"
 	"github.com/Maidang1/hergo/internal/input"
+	"strings"
 	"testing"
 )
 
@@ -24,5 +26,16 @@ func TestCommandCatalogMatchesOpaqueIDAndAction(t *testing.T) {
 	state.Snapshot.Commands = append(state.Snapshot.Commands, endpoint.Command{CommandID: "ambiguous", BindingLabels: []string{"prefix+y"}, Action: "Shell"})
 	if _, err := matchCommand(state, bindings, 0); err == nil {
 		t.Fatal("ambiguous command accepted")
+	}
+}
+
+func TestImageEndpointErrorPointsOldServersToSettings(t *testing.T) {
+	if got := imageEndpointError("0.8.0").Error(); !strings.Contains(got, herdr.CompatibleVersion) || !strings.Contains(got, "Settings > Herdr") {
+		t.Fatal(got)
+	}
+	for _, version := range []string{"", herdr.CompatibleVersion} {
+		if got := imageEndpointError(version).Error(); got != "Herdr image endpoint is disconnected" {
+			t.Fatalf("%q: %s", version, got)
+		}
 	}
 }

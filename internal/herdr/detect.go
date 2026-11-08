@@ -27,6 +27,9 @@ type Installation struct {
 
 func (i Installation) Installed() bool { return i.Path != "" && i.Error == "" }
 
+// Outdated reports whether the executable is older than CompatibleVersion.
+func (i Installation) Outdated() bool { return i.Installed() && VersionOutdated(i.Version) }
+
 // ErrNotInstalled is the reason a missing executable gives.
 var ErrNotInstalled = errors.New("Herdr is not installed")
 

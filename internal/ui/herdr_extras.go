@@ -42,6 +42,11 @@ type ExtraHooks struct {
 	// dialog was closed without a choice.
 	InstallHerdr func(done func(error))
 	ChooseHerdr  func(done func(error))
+	// UpdateHerdr updates the installed Herdr the way this system calls for.
+	// done runs on the UI thread.
+	UpdateHerdr func(done func(error))
+	// ServerVersion is the running server's version, empty when not connected.
+	ServerVersion func() string
 	// Installation is what Hergo found of the Herdr executable.
 	Installation func() herdr.Installation
 	// WindowTitle sets the native window's title.
