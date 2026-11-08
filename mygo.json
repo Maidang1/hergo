@@ -1,7 +1,7 @@
 {
   "name": "Hergo",
   "identifier": "dev.hergo",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "icon": "assets/app/icon.png",
   "main": "./cmd/hergo",
   "out": "dist",
