@@ -65,7 +65,7 @@ jobs:
         id: dmg
         run: |
           name="Hergo-${{ steps.version.outputs.version }}-macos-universal.dmg"
-          mv "dist/darwin-universal/Hergo ${{ steps.version.outputs.version }}.dmg" "dist/$name"
+          mv "dist/darwin-universal/hergo-${{ steps.version.outputs.version }}.dmg" "dist/$name"
           shasum -a 256 "dist/$name" | sed 's| dist/| |' > "dist/$name.sha256"
           mkdir release-assets
           shopt -s nullglob
